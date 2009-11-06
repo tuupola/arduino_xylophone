@@ -1,0 +1,11 @@
+<div id="editor">
+  <form action="/song" method="post">
+  <% 20.times do |i| %>
+    <% 15.times do |j| %>
+    <input type="checkbox" name="row[<%=i%>][<%=j%>]" value="1" />
+    <img src="/img/ball-32x32.png" />
+    <% end %>
+  <% end %>
+  <input type="submit" />
+  </form>
+</div>
