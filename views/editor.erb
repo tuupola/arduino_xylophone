@@ -1,8 +1,8 @@
 <div id="editor">
   <form id="editor_form" action="/song" method="post">
   <% 20.times do |i| %>
-    <% 15.times do |j| %>
-    <input type="checkbox" name="notes[<%=i%>][<%=j%>]" value="1" />
+    <% @notes.each_index do |j| %>
+    <input type="checkbox" name="notes[<%=i%>][<%=j%>]" value="<%=@notes.at(j)%>" />
     <img src="/img/ball-32x32.png" />
     <% end %>
   <% end %>

@@ -7,6 +7,8 @@ require 'sequel'
 # Setup
 #
 
+NOTES = 'CDEFGABCDEFGABC'
+
 DB = Sequel.sqlite('xylophone.db')
 
 DB.create_table? :songs do
@@ -50,12 +52,13 @@ end
 # New song editor.
 get '/song' do
   @title = 'More jingle bells soon at theatre near you!'
+  @notes = NOTES.split(//)
   erb :editor
 end
 
 # Save new song to dabase.
 post '/song' do
-  @song = Song.create(:data => notes_to_binary_string_csv, :status => 'NEW')
+  @song = Song.create(:data => notes_to_char_string_csv, :status => 'NEW')
   erb :song
 end
 
@@ -79,26 +82,35 @@ end
 
 helpers do
   
-  def notes_to_binary_string_array
+  def notes_to_char_string_array
     rows = []
     
     params['notes'].each do |row, row_notes| 
-      binary = '000000000000000'
+      string_of_notes = empty_row_of_notes
       row_notes.each do |key, value|
-        binary[key.to_i] = value
+        string_of_notes[key.to_i] = value
       end 
-      rows[row.to_i] = '0b0' << binary
+      rows[row.to_i] = string_of_notes
     end
     # Convert any nil to binary zero
-    rows.map! do |binary|
-      binary ||= '0b0000000000000000'
+    rows.map! do |string_of_notes|
+      string_of_notes ||= empty_row_of_notes
     end
     rows
   end
   
-  def notes_to_binary_string_csv
-    notes_to_binary_string_array.join(',')
+  def notes_to_char_string_csv
+    notes_to_char_string_array.join(',')
   end
+  
+  def empty_row_of_notes
+    empty_row = '';
+    NOTES.length.times do
+      empty_row << '0';
+    end
+    empty_row
+  end
+  
   
 end
 
