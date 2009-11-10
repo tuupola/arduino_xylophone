@@ -1,4 +1,4 @@
-<div id="editor">
+<div id="editor" style="width: <%= @width %>px">
   <form id="editor_form" action="/song" method="post">
   <% 20.times do |i| %>
     <% @notes.each_index do |j| %>

@@ -53,6 +53,7 @@ end
 get '/song' do
   @title = 'More jingle bells soon at theatre near you!'
   @notes = NOTES.split(//)
+  @width = NOTES.length * 32
   erb :editor
 end
 
@@ -92,7 +93,7 @@ helpers do
       end 
       rows[row.to_i] = string_of_notes
     end
-    # Convert any nil to binary zero
+    # Convert any nil to empty row of notes
     rows.map! do |string_of_notes|
       string_of_notes ||= empty_row_of_notes
     end
