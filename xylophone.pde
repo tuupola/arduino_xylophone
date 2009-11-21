@@ -1,5 +1,6 @@
 #include <Client.h>
 #include <Ethernet.h>
+
 #include <Dhcp.h>
 #include <WString.h>
 #include <Wire.h>
@@ -31,7 +32,7 @@ String notes           = "CDEFGABcdefgab";
 String jingle_bells    = "EEE EEE EGCDE   FFFFFEEEEDDEE G GGFDC ";
 String twinkle_twinkle = "CCGGAAG FFEEDDC GGFFEED GGFFEDC ";
 
-char song[128][14]; 
+String song;
 
 void setup(){
     Serial.begin(9600);
@@ -67,6 +68,12 @@ void setup(){
 
 void loop() {
     digitalWrite(LED, HIGH);
+        
+    int result = memoryTest();
+    Serial.print("Memory test results: ");
+    Serial.print(result,DEC);
+    Serial.println(" bytes free");
+
     switch (status) {
         case DISCONNECTED:
             connect();
@@ -79,10 +86,9 @@ void loop() {
             disconnect();
             break;
     }
-  
     digitalWrite(LED, LOW);
+    center_all_servos();
     delay(1000);
-    //servo_test();
 }
 
 void connect() {
@@ -102,39 +108,51 @@ void disconnect() {
 }
 
 void request_next_song() {
+    song = ' ';
     Serial.println("Requesting next song...");
     boolean start_mark_received = false;
-    char get[100];
     client.println("GET /next HTTP/1.0");
     client.println();
     delay(50);
     while (client.available()) {
         char c = client.read();
-        if (start_mark_received == true) {
-            Serial.print(c);
-        } else if (c == '-') {
+        if (start_mark_received) {
+            song.append(c);
+        } else if (c == '=') {
             start_mark_received = true;
         }
     }
+    Serial.println(song);
 }
 
 void record_song() {
-    Serial.println("Recording...");
+    Serial.print("Recording...");
+    play(song);
+    delay(2000);
+    Serial.println();
     status = COMPLETE;
 }
 
 void note(char s) {
     int i = notes.indexOf(s);
+    if (-1 != i) {
+        hammer_down();
+        delay(50);
+        hammer_up();
+    }
+}
+
+void hammer_down(char s) {
+    int i = notes.indexOf(s);
     Serial.print(s);
-    Serial.print(":");
-    Serial.print(i);
-    Serial.print(":");
-    Serial.println(servo[i]);
     Wire.beginTransmission(SD21);
     Wire.send(servo[i]);    
     Wire.send(servo_center[i] - 20);
     Wire.endTransmission();
-    delay(50);
+}
+
+void hammer_up(char s) {
+    int i = notes.indexOf(s);
     Wire.beginTransmission(SD21);
     Wire.send(servo[i]);
     Wire.send(servo_center[i]);
@@ -144,8 +162,13 @@ void note(char s) {
 void play(char *s) {
     int l = strlen(s);
     for (int x = 0; x < l; x++) {
-        note(s[x]);
-        delay(TEMPO);
+        if (',' == s[x]) {
+            delay(50);
+            center_all_servos();
+            delay(TEMPO);
+        } else {
+            hammer_down(s[x]);            
+        }
     }
 }
 
@@ -156,5 +179,22 @@ void center_all_servos() {
         Wire.send(servo_center[i]);
         Wire.endTransmission();
     }
+}
+
+// this function will return the number of bytes currently free in RAM
+int memoryTest() {
+  int byteCounter = 0; // initialize a counter
+  byte *byteArray; // create a pointer to a byte array
+  // More on pointers here: http://en.wikipedia.org/wiki/Pointer#C_pointers
+
+  // use the malloc function to repeatedly attempt allocating a certain number of bytes to memory
+  // More on malloc here: http://en.wikipedia.org/wiki/Malloc
+  while ( (byteArray = (byte*) malloc (byteCounter * sizeof(byte))) != NULL ) {
+    byteCounter++; // if allocation was successful, then up the count for the next try
+    free(byteArray); // free memory after allocating it
+  }
+  
+  free(byteArray); // also free memory after the function finishes
+  return byteCounter; // send back the highest number of bytes successfully allocated
 }
 
