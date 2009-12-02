@@ -17,6 +17,7 @@ on run
 		display dialog " could not open port "
 	end if
 	delay 2
+	say "Ding"
 end run
 
 on quit
@@ -25,40 +26,38 @@ on quit
 end quit
 
 on idle
+	
 	set num to serialport bytes available arduino
 	if num is greater than 0 then
 		
-		-- Read chars from serial until newline received.
 		-- Protocol looks like command:parameter<newline>
-		set char to serialport read arduino for 1
-		if char is equal to (ASCII character 10) then
-			set temp to split(incoming, ":")
-			set command to item 1 of temp
-			set parameter to item 2 of temp
-			set incoming to ""
-			--display dialog command & " - " & parameter
-		else
-			set incoming to incoming & char
-		end if
+		set incoming to serialport read arduino
+		set temp to split(incoming, ":")
+		set command to item 1 of temp
+		set parameter to item 2 of temp
+		set incoming to ""
+		--display dialog command & " - " & parameter
 		
 		if command is equal to "record" then
 			set command to ""
-			say "Should start recording."
 			
 			try
 				tell application "CamSpinner"
 					start recording
 				end tell
+				say "Start recording."
 			on error
 				say "Start recording failed."
 			end try
 			
 		else if command is equal to "stop" then
 			set command to ""
-			say "Should stop recording and copy video."
+			
 			try
 				
 				tell application "CamSpinner"
+					
+					say "Stop recording and copy video."
 					
 					set video_file to stop recording
 					
@@ -94,10 +93,16 @@ on idle
 			on error
 				say "Stop recording failed."
 			end try
+			
+		else if command is equal to "debug" then
+			set command to ""
+			log parameter
+			say parameter
 		end if
 	end if
 	return 1
 end idle
+
 
 on split(input, delimiter)
 	set previous to AppleScript's text item delimiters
