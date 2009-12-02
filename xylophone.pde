@@ -37,7 +37,7 @@ String song;
 String song_id;
 
 void setup(){
-    Serial.begin(9600);
+    Serial.begin(19200);
   
     Serial.println("debug:Starting Arduino.");
     int dhcp_result = Dhcp.beginWithDHCP(mac);
@@ -156,7 +156,7 @@ void wait_for_laptop() {
         if (Serial.read() == 'c') {
             status = COMPLETE;
         }
-	}
+    }
 }
 
 /*

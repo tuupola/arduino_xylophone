@@ -12,7 +12,7 @@ on run
 	
 	-- Select port where Arduino is located
 	set device to choose from list (serialport list)
-	set arduino to serialport open device bps rate 9600 data bits 8 parity 0 stop bits 1 handshake 0
+	set arduino to serialport open device bps rate 19200 data bits 8 parity 0 stop bits 1 handshake 0
 	if arduino is equal to -1 then
 		display dialog " could not open port "
 	end if
