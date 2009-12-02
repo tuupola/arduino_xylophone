@@ -94,6 +94,9 @@ on idle
 				say "Stop recording failed."
 			end try
 			
+			-- Notify Arduino we are done
+			serialport write "c" to arduino
+			
 		else if command is equal to "debug" then
 			set command to ""
 			log parameter
