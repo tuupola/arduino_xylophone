@@ -1,11 +1,14 @@
+-- Globals are ugly but so is my AppleScript-fu
 global arduino
+global incoming
+global command
+global parameter
 
 on run
-	
-	-- Start transmit
-	tell application "Transmit"
-		
-	end tell
+	-- Reset everything
+	set incoming to ""
+	set command to ""
+	set parameter to ""
 	
 	-- Select port where Arduino is located
 	set device to choose from list (serialport list)
@@ -14,7 +17,6 @@ on run
 		display dialog " could not open port "
 	end if
 	delay 2
-	
 end run
 
 on quit
@@ -25,8 +27,22 @@ end quit
 on idle
 	set num to serialport bytes available arduino
 	if num is greater than 0 then
-		set x to serialport read arduino for 1
-		if x is equal to "r" then
+		
+		-- Read chars from serial until newline received.
+		-- Protocol looks like command:parameter<newline>
+		set char to serialport read arduino for 1
+		if char is equal to (ASCII character 10) then
+			set temp to split(incoming, ":")
+			set command to item 1 of temp
+			set parameter to item 2 of temp
+			set incoming to ""
+			--display dialog command & " - " & parameter
+		else
+			set incoming to incoming & char
+		end if
+		
+		if command is equal to "record" then
+			set command to ""
 			say "Should start recording."
 			
 			try
@@ -37,7 +53,8 @@ on idle
 				say "Start recording failed."
 			end try
 			
-		else if x is equal to "s" then
+		else if command is equal to "stop" then
+			set command to ""
 			say "Should stop recording and copy video."
 			try
 				
@@ -48,7 +65,9 @@ on idle
 					-- Make an atomic copy of the video file.
 					-- It will be rsynced later to webserver.
 					tell application "Finder"
-						copy file video_file to folder "Rsync" of disk "Macintosh HD"
+						set properties of video_file to {name:parameter}
+						-- copy file video_file to folder "Rsync" of disk "Macintosh HD" 
+						duplicate video_file to folder "Rsync" of disk "Macintosh HD" with replacing
 						move video_file to trash
 						empty trash
 					end tell
@@ -79,3 +98,11 @@ on idle
 	end if
 	return 1
 end idle
+
+on split(input, delimiter)
+	set previous to AppleScript's text item delimiters
+	set AppleScript's text item delimiters to delimiter
+	set output to text items of input
+	set AppleScript's text item delimiters to previous
+	return output
+end split
