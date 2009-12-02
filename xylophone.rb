@@ -7,7 +7,7 @@ require 'sequel'
 # Setup
 #
 
-NOTES = 'CDEFGABCDEFGABC'
+NOTES = 'CDEFGABcdefga'
 
 DB = Sequel.sqlite('xylophone.db')
 
@@ -33,7 +33,11 @@ end
 # Get next song from queue.
 get '/next' do
   @song = Song.dataset.filter(:status => ['NEW']).order(:id).first
-  erb :song
+  if @song
+    @song.status = 'DONE'
+    @song.save
+    erb :song_txt, :layout => false
+  end
 end
 
 # Remove song from queue.
