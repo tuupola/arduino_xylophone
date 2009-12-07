@@ -4,22 +4,22 @@ body {
 	color: #fff;
 }
 
-#editor {
-	width: 480px;
+.editor {
 	cursor: pointer;
+	margin:0px auto;
 }
 
-#editor img {
-	height: 32px;
-	width: 32px;
+.editor img {
+	height: 16px;
+	width: 16px;
 	float: left;
 	opacity: 0.4;
 }
 
-#editor img.play {
+.editor img.play {
 	opacity: 1.0;
 }
 
-#editor input[type="checkbox"] {
+.editor input[type="checkbox"] {
 	display: none;
 }

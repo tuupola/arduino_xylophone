@@ -57,7 +57,7 @@ end
 get '/song' do
   @title = 'More jingle bells soon at theatre near you!'
   @notes = NOTES.split(//)
-  @width = NOTES.length * 32
+  @width = NOTES.length * 16
   erb :editor
 end
 
