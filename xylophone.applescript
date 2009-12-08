@@ -42,8 +42,10 @@ on idle
 			set command to ""
 			
 			try
-				tell application "CamSpinner"
-					start recording
+				tell application "QuickTime Player"
+					activate
+					new movie recording
+					start first document
 				end tell
 				say "Start recording."
 			on error
@@ -55,20 +57,16 @@ on idle
 			
 			try
 				
-				tell application "CamSpinner"
+				tell application "QuickTime Player"
 					
-					say "Stop recording and copy video."
+					say "Stop recording."
 					
-					set video_file to stop recording
-					
-					-- Make an atomic copy of the video file.
-					-- It will be rsynced later to webserver.
+					stop first document
+					set video_file to file of first document as alias
+					close first document
 					tell application "Finder"
-						set properties of video_file to {name:parameter}
-						-- copy file video_file to folder "Rsync" of disk "Macintosh HD" 
-						duplicate video_file to folder "Rsync" of disk "Macintosh HD" with replacing
-						move video_file to trash
-						empty trash
+						set name of video_file to "xxx.mov"
+						move video_file to folder "Users:tuupola:Movies:rsync" of disk "Macintosh HD" with replacing
 					end tell
 					
 					--tell application "Transmit"
