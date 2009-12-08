@@ -5,6 +5,72 @@ $(function() {
     if ($('#player').size()) {
         flowplayer("player", "/swf/flowplayer-3.1.5.swf");         
     }
+    
+    /* Initialize Soundmanager. */
+    
+    soundManager.url = '/swf/';
+
+    soundManager.onready(function(status) {
+        if (status.success) {
+            soundManager.createSound({
+                id: 'C',
+                url: '/sound/c1.mp3'
+            });
+            soundManager.createSound({
+                id: 'D',
+                url: '/sound/d1.mp3'
+            });
+            soundManager.createSound({
+                id: 'E',
+                url: '/sound/e1.mp3'
+            });
+            soundManager.createSound({
+                id: 'F',
+                url: '/sound/f1.mp3'
+            });
+            soundManager.createSound({
+                id: 'G',
+                url: '/sound/g1.mp3'
+            });
+            soundManager.createSound({
+                id: 'A',
+                url: '/sound/a2.mp3'
+            });
+            soundManager.createSound({
+                id: 'B',
+                url: '/sound/b2.mp3'
+            });
+            soundManager.createSound({
+                id: 'c',
+                url: '/sound/c2.mp3'
+            });
+            soundManager.createSound({
+                id: 'd',
+                url: '/sound/d2.mp3'
+            });
+            soundManager.createSound({
+                id: 'e',
+                url: '/sound/e2.mp3'
+            });
+            soundManager.createSound({
+                id: 'f',
+                url: '/sound/f_1.mp3'
+            });
+            soundManager.createSound({
+                id: 'g',
+                url: '/sound/g_1.mp3'
+            });
+            soundManager.createSound({
+                id: 'a',
+                url: '/sound/a_2.mp3'
+            }); 
+        }
+    });
+    
+    $('.editor img').click(function() {
+        soundManager.play($(this).attr('class'));
+    });
+    
         
     $('input:checkbox:checked').each(function() {
         $(this).next().addClass('play');        
