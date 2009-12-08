@@ -1,13 +1,13 @@
-<div class="editor" style="width: <%= @width %>px">
-  <form id="editor_form" action="/song" method="post">
-  <% 5.times do |i| %>
-    <span>
-    <% @notes.each_index do |j| %>
-      <input type="checkbox" name="notes[<%=i%>][<%=j%>]" value="<%=@notes.at(j)%>" />
-      <img src="/img/ball-16x16.png" />
+<form id="editor_form" action="/song" method="post">
+  <div class="editor" style="width: <%= @width %>px">
+    <% 30.times do |i| %>
+      <span>
+      <% @notes.each_index do |j| %>
+        <input type="checkbox" name="notes[<%=i%>][<%=j%>]" value="<%=@notes.at(j)%>" />
+        <img src="/img/ball-16x16.png" />
+      <% end %>
+      </span>
     <% end %>
-    </span>
-  <% end %>
-  <input type="submit" />
-  </form>
-</div>
+    <input type="submit" />
+  </div>
+</form>
