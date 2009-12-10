@@ -13,12 +13,12 @@
 #define LED    13
 #define SERVO_CENTER 115
 
-#define DISCONNECTED 0
+#define COMPLETE 0
 #define CONNECTED 1
-#define RECORDING 2
-#define COMPLETE 3
+#define NEW_SONG 2
+#define RECORDING 3
 
-int status = DISCONNECTED;
+int status = COMPLETE;
 
 byte mac[]    = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 byte server[] = {192, 168, 1, 65};
@@ -41,7 +41,7 @@ String song;
 String song_id;
 
 void setup(){
-    Serial.begin(57600);
+    Serial.begin(115200);
   
     Serial.println("debug:Starting Arduino.");
 
@@ -73,6 +73,7 @@ void setup(){
     pinMode(LED, OUTPUT);     
     center_all_servos();
 
+    /*
     delay(1000);    
     Serial.println("debug:First servo test.");
     play(servo_test, 200);
@@ -80,7 +81,7 @@ void setup(){
     play(servo_test, 100);
     Serial.println("debug:Third servo test.");
     play(servo_test, 80);
-    
+    */
 }
 
 void loop() {
@@ -89,25 +90,25 @@ void loop() {
     //Serial.print("debug:Memory ");
     //Serial.print(result,DEC);
     //Serial.println(" bytes free");
-            
+
     switch (status) {
-        case DISCONNECTED:
+        case COMPLETE:
             connect();
             break;
         case CONNECTED:
             request_next_song();
+            delay(1000);
+            disconnect();
+            break;
+        case NEW_SONG:
             record_song();                
             break;
         case RECORDING:
             wait_for_laptop();
-            break;       
-        case COMPLETE:
-            disconnect();
-            break;
     }
     digitalWrite(LED, LOW);
     center_all_servos();
-    delay(2000);
+    delay(5000);
 }
 
 void connect() {
@@ -123,7 +124,6 @@ void connect() {
 void disconnect() {
     Serial.println("debug:Disconnecting from webserver.");
     client.stop();
-    status = DISCONNECTED;
 }
 
 void request_next_song() {
@@ -146,27 +146,31 @@ void request_next_song() {
             start_mark_received = true;
         }
     }
+    if (song.length() > 0) { 
+        status = NEW_SONG;
+        Serial.print("debug:New song with length of ");
+        Serial.print(song.length());
+        Serial.println(".");
+    } else {
+        Serial.println("debug:No new songs.");
+        status = COMPLETE;
+    }
     //Serial.println(song);
 }
 
 void record_song() {
-    if (song.length() > 0) {
-        status = RECORDING;
-        Serial.print("record:song-");
-        Serial.print(song_id);
-        Serial.println(".mov");
-        /* Delay 5 seconds for webcam to catch up. */
-        delay(5000);
-        //play(song, TEMPO);
-        play(jingle_bells, TEMPO);
-        play(jingle_bells, TEMPO);
-        Serial.print("stop:song-");
-        Serial.print(song_id);
-        Serial.println(".mov");
-    } else {
-        Serial.println("debug:No new songs.");
-        status = COMPLETE;        
-    }
+    status = RECORDING;
+    Serial.print("record:song-");
+    Serial.print(song_id);
+    Serial.println(".mov");
+    /* Delay 5 seconds for webcam to catch up. */
+    delay(5000);
+    //play(song, TEMPO);
+    play(jingle_bells, TEMPO);
+    play(jingle_bells, TEMPO);
+    Serial.print("stop:song-");
+    Serial.print(song_id);
+    Serial.println(".mov");
 }
 
 void wait_for_laptop() {
