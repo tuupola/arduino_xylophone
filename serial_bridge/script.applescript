@@ -1,18 +1,5 @@
 -- Sample connection attachment script for Serial Bridge.
 --
--- This script, if it is in the same folder as the Serial Bridge database settings
--- file (it is by default), will automatically be loaded and launched when Serial
--- Bridge is launched. It will be terminated and reloaded whenever any serial
--- port settings change for this connection, or if the Reload button is pressed.
---
--- MyProcessSerialData() below contains sample code you can modify to
--- wait for serial data, read serial data, send serial data, and log information
--- to the Serial Bridge log window.
---
--- The entry point into this file is startCommunication(). Although
--- documentation is provided below for both functions; you will probably
--- only need to modify MyProcessSerialData().
---
 -- 2005-03-29 Original. (Matt Bendiksen)
 -- 2005-04-01 Fixed event timeout bugs. (Matt Bendiksen)
 
@@ -87,8 +74,6 @@ end MyProcessSerialData
 on startCommunication(connectionName)
 	tell application "Serial Bridge"
 		
-		
-		
 		-- Loop forever: wait for data, read it, process it, and optionally send
 		-- out serial data.
 		repeat while true
@@ -122,3 +107,4 @@ on startCommunication(connectionName)
 		end repeat
 	end tell
 end startCommunication
+
