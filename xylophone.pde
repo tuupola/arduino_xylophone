@@ -8,9 +8,10 @@
 #include <ctype.h>
 
 #define SD21   0x61
-#define BOUNCE 80
-#define TEMPO  500
+#define BOUNCE 90
+#define TEMPO  200
 #define LED    13
+#define SERVO_CENTER 115
 
 #define DISCONNECTED 0
 #define CONNECTED 1
@@ -20,52 +21,65 @@
 int status = DISCONNECTED;
 
 byte mac[]    = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-byte server[] = {192, 168, 1, 120};
+byte server[] = {192, 168, 1, 65};
 
-int servo[] = {0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d};
-int servo_center[] = {114, 110, 133, 131, 122,130, 115, 112, 117, 139, 130, 132, 127, 127, 123};
-int num_servos = 15;
+int servo[] = {0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b};
+int servo_adjust[] = {-7, +9, -16, +17, -2, +15, -18, +4, -7, +16, -18, +16, +4};
+int num_servos = 13;
 
 Client client(server, 4567);
 
 String notes           = "CDEFGABcdefga";
                           
-String jingle_bells    = "E,E,E, ,E,E,E, ,E,G,C,D,E, ,  ,F,F,F,F,F,E,E,E,E,D,D,E,E, ,G, ,G,G,F,D,C, ";
-String twinkle_twinkle = "CCGGAAG FFEEDDC GGFFEED GGFFEDC ";
+String jingle_bells    = "E,E,E, ,E,E,E, ,E,G,C,D,E, , ,F,F,F,F,F,E,E,E,E,D,D,E,E, ,G, ,G,G,F,D,C, ";
+String servo_test      = "C,D,E,F,G,A,B,c,d,e,f,g,a,g,f,e,d,c,B,A,G,F,E,D,C, ";
+String servo_test2      = "C,C,C,C,C,C,C,C,D,D,D,D,D,D,D,D,E,E,E,E,E,E,E, ";
+
+String twinkle_twinkle = "C,C,G,G,A,A,G, ,F,F,E,E,D,D,C, ,G,G,F,F,E,E,D, ,G,G,F,F,E,D,C, ";
 
 String song;
 String song_id;
 
 void setup(){
-    Serial.begin(19200);
+    Serial.begin(57600);
   
     Serial.println("debug:Starting Arduino.");
+
     int dhcp_result = Dhcp.beginWithDHCP(mac);
   
     if (1 == dhcp_result)  {
         byte dhcp_data[4];
         char ip[4];
-        //Serial.print("debug:Arduino ip ");
+        Serial.print("debug:Arduino ip ");
         Dhcp.getLocalIp(dhcp_data);
         for(int i = 0; i < 4; i++) {
-            //Serial.print(itoa(dhcp_data[i], ip, 10));
-            //Serial.print(".");
+            Serial.print(itoa(dhcp_data[i], ip, 10));
+            Serial.print(".");
         }
-        //Serial.println();
-        //Serial.print("debug:Gateway ip ");
+        Serial.println();
+        delay(1000);
+        Serial.print("debug:Gateway ip ");
         Dhcp.getGatewayIp(dhcp_data);
         for(int i = 0; i < 4; i++) {
-            //Serial.print(itoa(dhcp_data[i], ip, 10));
-            //Serial.print(".");
+            Serial.print(itoa(dhcp_data[i], ip, 10));
+            Serial.print(".");
         }
-        //Serial.println();    
+        Serial.println();    
     } else {
         Serial.println("debug:Could not get IP address.");
     }
-    
+
     Wire.begin();
     pinMode(LED, OUTPUT);     
     center_all_servos();
+
+    delay(1000);    
+    Serial.println("debug:First servo test.");
+    play(servo_test, 200);
+    Serial.println("debug:Second servo test.");
+    play(servo_test, 100);
+    Serial.println("debug:Third servo test.");
+    play(servo_test, 80);
     
 }
 
@@ -93,21 +107,21 @@ void loop() {
     }
     digitalWrite(LED, LOW);
     center_all_servos();
-    delay(1000);
+    delay(2000);
 }
 
 void connect() {
     if (client.connect()) {
-        //Serial.println("debug:Connected...");
+        Serial.println("debug:Connected to webserver.");
         status = CONNECTED;
     } else {
-        //Serial.println("debug:Connection failed...");
+        Serial.println("debug:Connection to webserver failed.");
         status = COMPLETE;  
     }
 }
 
 void disconnect() {
-    //Serial.println("debug:Disconnecting...");
+    Serial.println("debug:Disconnecting from webserver.");
     client.stop();
     status = DISCONNECTED;
 }
@@ -115,7 +129,7 @@ void disconnect() {
 void request_next_song() {
     song    = ' ';
     song_id = ' ';
-    //Serial.println("debug:Requesting next song...");
+    Serial.println("debug:Requesting next song.");
     boolean start_mark_received = false;
     client.println("GET /next HTTP/1.0");
     client.println();
@@ -138,20 +152,25 @@ void request_next_song() {
 void record_song() {
     if (song.length() > 0) {
         status = RECORDING;
-        Serial.print("record:");
-        Serial.println(song_id);
-        play(song);
-        //play(jingle_bells);
-        Serial.print("stop:");
-        Serial.println(song_id);
+        Serial.print("record:song-");
+        Serial.print(song_id);
+        Serial.println(".mov");
+        /* Delay 5 seconds for webcam to catch up. */
+        delay(5000);
+        //play(song, TEMPO);
+        play(jingle_bells, TEMPO);
+        play(jingle_bells, TEMPO);
+        Serial.print("stop:song-");
+        Serial.print(song_id);
+        Serial.println(".mov");
     } else {
-        //Serial.println("debug:No song in queue..");
+        Serial.println("debug:No new songs.");
         status = COMPLETE;        
     }
 }
 
 void wait_for_laptop() {
-    //Serial.println("debug:Waiting for laptop to be ready.");
+    Serial.println("debug:Waiting for laptop to be ready.");
     while (Serial.available() > 0) {
         if (Serial.read() == 'c') {
             status = COMPLETE;
@@ -177,7 +196,7 @@ void hammer_down(char s) {
         //Serial.print(s);
         Wire.beginTransmission(SD21);
         Wire.send(servo[i]);    
-        Wire.send(servo_center[i] - 20);
+        Wire.send(SERVO_CENTER + servo_adjust[i] - 18);
         Wire.endTransmission();
     }
 }
@@ -188,19 +207,19 @@ void hammer_up(char s) {
     if (-1 != i) {
         Wire.beginTransmission(SD21);
         Wire.send(servo[i]);
-        Wire.send(servo_center[i]);
+        Wire.send(SERVO_CENTER + servo_adjust[i]);
         Wire.endTransmission();
     }
 }
 
-void play(char *s) {
+void play(char *s, int tempo) {
     int l = strlen(s);
     //Serial.print("Debug:");
     for (int x = 0; x < l; x++) {
         if (',' == s[x]) {
-            delay(50);
+            delay(20);
             center_all_servos();
-            delay(TEMPO);
+            delay(tempo);
         } else {
             hammer_down(s[x]);            
         }
@@ -212,7 +231,7 @@ void center_all_servos() {
     for (int i = 0; i < num_servos; i++) {
         Wire.beginTransmission(SD21);
         Wire.send(servo[i]);    
-        Wire.send(servo_center[i]);
+        Wire.send(SERVO_CENTER + servo_adjust[i]);
         Wire.endTransmission();
     }
 }
