@@ -8,10 +8,11 @@
 #include <ctype.h>
 
 #define SD21   0x61
-#define BOUNCE 90
+#define HAMMER_THROW 15 /* How low hammer hits. */
+#define HAMMER_TIME  19 /* How long hammer stays down. Can't touch this! */
 #define TEMPO  200
 #define LED    13
-#define SERVO_CENTER 115
+#define SERVO_CENTER 118
 
 #define COMPLETE 0
 #define CONNECTED 1
@@ -24,7 +25,7 @@ byte mac[]    = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 byte server[] = {192, 168, 1, 65};
 
 int servo[] = {0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b};
-int servo_adjust[] = {-7, +9, -16, +17, -2, +15, -18, +4, -7, +16, -18, +16, +4};
+int servo_adjust[] = {-3, +8, -20, +17, -2, +15, -18, +4, -7, +16, -18, +19, +6};
 int num_servos = 13;
 
 Client client(server, 4567);
@@ -73,7 +74,7 @@ void setup(){
     pinMode(LED, OUTPUT);     
     center_all_servos();
 
-    /*
+
     delay(1000);    
     Serial.println("debug:First servo test.");
     play(servo_test, 200);
@@ -81,7 +82,8 @@ void setup(){
     play(servo_test, 100);
     Serial.println("debug:Third servo test.");
     play(servo_test, 80);
-    */
+    delay(1000);    
+
 }
 
 void loop() {
@@ -133,7 +135,7 @@ void request_next_song() {
     boolean start_mark_received = false;
     client.println("GET /next HTTP/1.0");
     client.println();
-    delay(50);
+    delay(500);
     while (client.available()) {
         char c = client.read();
         if (start_mark_received) {
@@ -178,6 +180,7 @@ void wait_for_laptop() {
     while (Serial.available() > 0) {
         if (Serial.read() == 'c') {
             status = COMPLETE;
+            Serial.println("debug:Entering next loop.");
         }
     }
 }
@@ -200,7 +203,7 @@ void hammer_down(char s) {
         //Serial.print(s);
         Wire.beginTransmission(SD21);
         Wire.send(servo[i]);    
-        Wire.send(SERVO_CENTER + servo_adjust[i] - 18);
+        Wire.send(SERVO_CENTER + servo_adjust[i] - HAMMER_THROW);
         Wire.endTransmission();
     }
 }
@@ -221,7 +224,7 @@ void play(char *s, int tempo) {
     //Serial.print("Debug:");
     for (int x = 0; x < l; x++) {
         if (',' == s[x]) {
-            delay(20);
+            delay(HAMMER_TIME);
             center_all_servos();
             delay(tempo);
         } else {
