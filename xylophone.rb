@@ -24,10 +24,12 @@ NOTES = 'CDEFGABcdefga'
 
 configure :development do
   DB = Sequel.sqlite('xylophone.db')
+  set :smtp_server, 'mail.neti.ee'
 end
 
 configure :production do
   DB = Sequel.sqlite('/export/www/xylophone.taevas.ee/shared/xylophone.db')  
+  set :smtp_server, 'bounce.taevas.com'
 end
 
 DB.create_table? :songs do
@@ -155,7 +157,7 @@ post '/greeting' do
             :body => erb(:email, :layout => false),
             :via => :smtp, 
             :smtp => {
-                :host   => 'mail.neti.ee'
+                :host   => options.smtp_server
             }
 
     redirect '/greeting/' + @greeting.id.to_s
