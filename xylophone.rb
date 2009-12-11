@@ -85,6 +85,19 @@ get '/song/:id' do
   erb :song
 end
 
+# Show song page.
+get '/song/ajax/:id' do
+  @file_name = 'song-' + params[:id] + '.mov'
+  path = File.join(File.dirname(__FILE__), 'public', 'video', @file_name)
+  if File.exists?(path) 
+    @song = Song[params[:id]]
+    erb :ajax_song, :layout => false
+  else
+    not_found
+  end
+
+end
+
 get '/about' do
   "I'm running on Sinatra " + Sinatra::VERSION
 end

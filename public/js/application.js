@@ -12,14 +12,20 @@
  */
  
 $(function() {
+    
+    /* Show player only if video has been uploaded to webserver. */
+    var ajax_url = '/song/ajax/' + $('#video').attr('title');
 
-    /* For the pages were player should be displayed. */
-    if ($('#player').size()) {
-        flowplayer("player", "/swf/flowplayer-3.1.5.swf");         
-    }
-    
-    /* Initialize Soundmanager. */
-    
+    $('#video').ajaxComplete(function(request, settings){
+        if (settings.status===404){
+            $('#video').html("Video not ready yet.")
+        } else {
+            flowplayer("player", "/swf/flowplayer-3.1.5.swf");            
+        }
+    }).load(ajax_url);
+     
+    /* Initialize Soundmanager.*/
+    soundManager.debugMode = false;    
     soundManager.url = '/swf/';
 
     soundManager.onready(function(status) {
@@ -83,7 +89,6 @@ $(function() {
         soundManager.play($(this).attr('class'));
     });
     
-        
     $('input:checkbox:checked').each(function() {
         $(this).next().addClass('play');        
     });
