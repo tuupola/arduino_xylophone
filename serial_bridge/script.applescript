@@ -13,9 +13,6 @@
 --   https://github.com/tuupola/arduino_xylophone
 --
 
-
------------
--- 
 on MyProcessSerialData(arduino)
 	tell application "Serial Bridge"
 		
@@ -118,4 +115,3 @@ on startCommunication(connectionName)
 		end repeat
 	end tell
 end startCommunication
-

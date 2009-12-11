@@ -25,7 +25,7 @@ $(function() {
     /* If video was found stop checking. */
     $('#video').ajaxComplete(function(request, settings){
         if (settings.status===404){
-            $('#video').html("Video not ready yet.")
+            $('#video').html("Song is still being recorded.")
         } else {
             clearInterval(interval_id);
             flowplayer("player", "/swf/flowplayer-3.1.5.swf");            

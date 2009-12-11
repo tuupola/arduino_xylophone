@@ -121,7 +121,7 @@ end
 # Show player if video file exists else return 404.
 get '/song/ajax/:id' do
   @file_name = 'song-' + params[:id] + '.mov'
-  path = File.join(File.dirname(__FILE__), 'public', 'video', @file_name)
+  path = File.join(File.dirname(__FILE__), 'public', 'system', 'rsync', @file_name)
   if File.exists?(path) 
     @song = Song[params[:id]]
     erb :ajax_song, :layout => false
