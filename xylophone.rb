@@ -21,7 +21,13 @@ require 'sequel'
 
 NOTES = 'CDEFGABcdefga'
 
-DB = Sequel.sqlite('xylophone.db')
+configure :development do
+  DB = Sequel.sqlite('xylophone.db')
+end
+
+configure :production do
+  DB = Sequel.sqlite('/export/www/xylophone.taevas.ee/shared/xylophone.db')
+end
 
 DB.create_table? :songs do
   primary_key :id
