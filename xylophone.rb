@@ -29,7 +29,7 @@ end
 
 configure :production do
   DB = Sequel.sqlite('/export/www/xylophone.taevas.ee/shared/xylophone.db')  
-  set :smtp_server, 'bounce.taevas.com'
+  set :smtp_server, 'bouncer.taevas.com'
 end
 
 DB.create_table? :songs do
