@@ -26,6 +26,7 @@ DB = Sequel.sqlite('xylophone.db')
 DB.create_table? :songs do
   primary_key :id
   String :data
+  String :email
   String :status
 end
 
@@ -75,8 +76,10 @@ end
 
 # Save new song to dabase.
 post '/song' do
-  @song = Song.create(:data => notes_to_char_string_csv, :status => 'NEW')
-  erb :song
+  @song = Song.create(:data => notes_to_char_string_csv, 
+                      :status => 'NEW', 
+                      :email => params[:email])
+  redirect '/song/' + @song.id.to_s
 end
 
 # Show song page.
