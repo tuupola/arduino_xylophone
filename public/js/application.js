@@ -84,17 +84,18 @@ $(function() {
             }); 
         }
     });
-    
-    $('.editor img').click(function() {
-        soundManager.play($(this).attr('class'));
-    });
-    
+        
+    /* Highlight all checked notes when user clicks back button. */
     $('input:checkbox:checked').each(function() {
         $(this).next().addClass('play');        
     });
     
+    /* Handle clicks on notes. */
     $('.editor img').click(function() {
         //console.log($(this).prev().val());
+
+        /* Play a preview sound when note is clicked. */
+        soundManager.play($(this).attr('class'));
         
         var notes_before = $(this).parent().children('input:checkbox:checked');
         
