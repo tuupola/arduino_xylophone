@@ -1,0 +1,7 @@
+RewriteEngine On
+
+#RewriteBase /
+
+# Everything not found goes to Sinatra
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule (.*) http://127.0.0.1:4567%{REQUEST_URI} [L,P,QSA] 
