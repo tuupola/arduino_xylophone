@@ -14,6 +14,7 @@ require 'rubygems'
 require 'sinatra'
 require 'erb'
 require 'sequel'
+require 'pony'
 
 #
 # Setup
@@ -37,6 +38,25 @@ DB.create_table? :songs do
 end
 
 class Song < Sequel::Model
+end
+
+DB.create_table? :greetings do
+  primary_key :id
+  Integer :song_id
+  String :from
+  String :user
+  String :to
+  String :friend
+  String :message
+end
+
+class Greeting < Sequel::Model
+  many_to_one :song
+  
+  def url
+    'http://xylophone.taevas.ee/greeting/' + self.id.to_s
+  end
+  
 end
 
 #
@@ -88,13 +108,17 @@ post '/song' do
   redirect '/song/' + @song.id.to_s
 end
 
-# Show song page.
+# Show song page if song with given id exists.
 get '/song/:id' do
   @song = Song[params[:id]]
-  erb :song
+  if @song
+    erb :song
+  else
+    not_found
+  end
 end
 
-# Show song page.
+# Show player if video file exists else return 404.
 get '/song/ajax/:id' do
   @file_name = 'song-' + params[:id] + '.mov'
   path = File.join(File.dirname(__FILE__), 'public', 'video', @file_name)
@@ -104,8 +128,40 @@ get '/song/ajax/:id' do
   else
     not_found
   end
-
 end
+
+# Show a greeting.
+get '/greeting/:id' do
+  @greeting = Greeting[params[:id]]
+  if @greeting
+    erb :greeting
+  else
+    not_found
+  end
+end
+
+# Save new greeting to dabase.
+post '/greeting' do
+  @greeting = Greeting.create(:song_id => params[:song_id], 
+                            :from => params[:from],
+                            :user => params[:user],
+                            :to => params[:to],
+                            :friend => params[:friend],
+                            :message => params[:message])
+
+  Pony.mail :to => @greeting.to, 
+            :from => @greeting.from, 
+            :subject => 'Xylophone from Inttertubes',
+            :body => erb(:email, :layout => false),
+            :via => :smtp, 
+            :smtp => {
+                :host   => 'bouncer.taevas.ee'
+            }
+
+  erb :greeting
+end
+
+
 
 get '/about' do
   "I'm running on Sinatra " + Sinatra::VERSION

@@ -1,2 +1,11 @@
 <div id="video" title="<%= @song.id %>">
 </div>
+<form method="post" action="/greeting">
+  <input type="hidden" name="song_id" value="<%= @song.id %>" />
+  Your email:<input type="text" name="from" /><br/>
+  Your name:<input type="text" name="user" /><br/>
+  Friend email:<input type="text" name="to" /><br/>
+  Friend name<input type="text" name="friend" /><br/>
+  <textarea name="message" />Lorem ipsum.</textarea><br />
+  <input type="submit" value="Send awesomeness!" />
+</form>
