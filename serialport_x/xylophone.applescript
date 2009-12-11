@@ -1,3 +1,16 @@
+--
+-- Xylophone - SerialPort X AppleScript for controlling webcam
+--
+-- Copyright (c) 2009 Mika Tuupola
+--
+-- Licensed under the MIT license:
+--   http://www.opensource.org/licenses/mit-license.php
+--
+-- Project home:
+--   https://github.com/tuupola/arduino_xylophone
+--
+ 
+
 -- Globals are ugly but so is my AppleScript-fu
 global arduino
 global incoming

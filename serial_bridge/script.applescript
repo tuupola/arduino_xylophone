@@ -1,7 +1,18 @@
--- Sample connection attachment script for Serial Bridge.
 --
--- 2005-03-29 Original. (Matt Bendiksen)
--- 2005-04-01 Fixed event timeout bugs. (Matt Bendiksen)
+-- Xylophone - SerialPort X AppleScript for controlling webcam
+--
+-- Based on sample connection attachment script for Serial Bridge
+-- by Matt Bendiksen
+--
+-- Copyright (c) 2009 Mika Tuupola
+--
+-- Licensed under the MIT license:
+--   http://www.opensource.org/licenses/mit-license.php
+--
+-- Project home:
+--   https://github.com/tuupola/arduino_xylophone
+--
+
 
 -----------
 -- 

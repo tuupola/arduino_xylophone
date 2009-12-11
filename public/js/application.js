@@ -1,4 +1,16 @@
-
+/*
+ * Xylophone - Arduino controlled xylophone
+ *
+ * Copyright (c) 2009 Mika Tuupola
+ *
+ * Licensed under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *
+ * Project home:
+ *   https://github.com/tuupola/arduino_xylophone
+ *
+ */
+ 
 $(function() {
 
     /* For the pages were player should be displayed. */

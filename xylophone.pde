@@ -1,3 +1,16 @@
+/*
+ * Xylophone - Arduino sketch for Internet controlled xylophone
+ *
+ * Copyright (c) 2009 Mika Tuupola
+ *
+ * Licensed under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *
+ * Project home:
+ *   https://github.com/tuupola/arduino_xylophone
+ *
+ */
+
 #include <Client.h>
 #include <Ethernet.h>
 
@@ -167,9 +180,10 @@ void record_song() {
     Serial.println(".mov");
     /* Delay 5 seconds for webcam to catch up. */
     delay(5000);
-    //play(song, TEMPO);
-    play(jingle_bells, TEMPO);
-    play(jingle_bells, TEMPO);
+    play(song, TEMPO);
+    play(song, TEMPO);
+    //play(jingle_bells, TEMPO);
+    //play(jingle_bells, TEMPO);
     Serial.print("stop:song-");
     Serial.print(song_id);
     Serial.println(".mov");
