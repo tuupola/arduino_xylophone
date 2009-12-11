@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Database type="dict">
+	<AppVers type="string">1.0.9</AppVers>
+	<DatabaseVers type="string">1</DatabaseVers>
+	<SerialPortName type="string">usbserial-A9007MJL</SerialPortName>
+	<SerialPortBaud type="string">10</SerialPortBaud>
+	<SerialDataSize type="string">8</SerialDataSize>
+	<SerialStopBits type="string">1</SerialStopBits>
+	<SerialFlowControl type="string">1</SerialFlowControl>
+	<SerialParity type="string">1</SerialParity>
+	<LogAllInputOutput type="string">true</LogAllInputOutput>
+	<WindowPos type="string">24 52</WindowPos>
+</Database>
