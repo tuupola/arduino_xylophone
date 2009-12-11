@@ -1,5 +1,7 @@
 <div id="video" title="<%= @greeting.song.id %>">
 </div>
-<p>
+<div id="greeting">
   Greeting id <%= @greeting.id %> with song id  <%= @greeting.song.id %>  from <%= @greeting.from %> to <%= @greeting.to %> at url <%= @greeting.url %>
-</p>
+  <br /><br />
+  <%= @greeting.message %>
+</div>

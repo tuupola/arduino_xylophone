@@ -27,7 +27,7 @@ configure :development do
 end
 
 configure :production do
-  DB = Sequel.sqlite('/export/www/xylophone.taevas.ee/shared/xylophone.db')
+  DB = Sequel.sqlite('/export/www/xylophone.taevas.ee/shared/xylophone.db')  
 end
 
 DB.create_table? :songs do
@@ -155,10 +155,10 @@ post '/greeting' do
             :body => erb(:email, :layout => false),
             :via => :smtp, 
             :smtp => {
-                :host   => 'bouncer.taevas.ee'
+                :host   => 'mail.neti.ee'
             }
 
-  erb :greeting
+    redirect '/greeting/' + @greeting.id.to_s
 end
 
 
@@ -208,5 +208,3 @@ helpers do
   
   
 end
-
-
