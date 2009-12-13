@@ -43,43 +43,13 @@ load 'models.rb'
 # For arduino
 #
 
-# Get list of songs in queue.
-get '/queue' do
-  @songs = Song.filter(:status => ['NEW']).order(:id)
-  erb :queue
-end
-
 # Get next song from queue. Also check if any new songs
 # are uploaded to webserver and send notification email.
 get '/next' do
   
-  # Use request as poor mans cron for sending notification
-  # of new video files recently rsynced to webserver.
-  recording = Song.filter(:status => ['RECORDING'])
-  recording.each do |@song|
-    # If we have video file send the email.
-    if File.exists?(@song.file_path)
-      begin
-        Pony.mail :to => @song.email, 
-                  :from => 'webmaster@taevas.ee',
-                  :subject => 'Your song is ready',
-                  :body => erb(:notification_email, :layout => false),
-                  :via => :smtp, 
-                  :smtp => {
-                      :host   => options.smtp_server
-                  } 
-        @song.status = 'DONE'
-        logger.debug "Sent email to " + @song.email + 
-                     " with song id " + @song.id.to_s + "."
-
-      # Probably broken email address. Log and forget.
-      rescue Exception => e
-        logger.debug "Sending mail to " + @song.email + " failed."
-        @song.status = 'EMAIL_FAILED'
-      end      
-      @song.save
-    end
-  end
+  # Use this request as poor mans cron to send email
+  # notifications of videos which are ready.
+  send_email_notifications
 
   # Give next from the queue to Arduino.
   @song = Song.filter(:status => ['NEW']).order(:id).first
@@ -127,7 +97,7 @@ get '/song/:id' do
 end
 
 # Show player if video file exists else return 404.
-# This gets called with jQuery.load()
+# This gets called with jQuery.load() from page /song/:id
 get '/song/ajax/:id' do
   @song = Song[params[:id]]
   if File.exists?(@song.file_path) 
@@ -185,6 +155,41 @@ end
 
 helpers do
   
+  # Send email notification to user if their video is already been
+  # rsynced to webserver.
+  def send_email_notifications
+    recording = Song.filter(:status => ['RECORDING'])
+    recording.each do |@song|
+      # If we have video file send the email.
+      if File.exists?(@song.file_path)
+        begin
+          Pony.mail :to => @song.email, 
+                    :from => 'webmaster@taevas.ee',
+                    :subject => 'Your song is ready',
+                    :body => erb(:notification_email, :layout => false),
+                    :via => :smtp, 
+                    :smtp => {
+                        :host   => options.smtp_server
+                    } 
+          @song.status = 'DONE'
+          logger.debug "Sent email to " + @song.email + 
+                       " with song id " + @song.id.to_s + "."
+
+        # Probably broken email address. Log and forget.
+        rescue Exception => e
+          logger.debug "Sending mail to " + @song.email + " failed."
+          @song.status = 'EMAIL_FAILED'
+        end      
+        @song.save
+      end
+    end
+  end
+  
+  # Transform submitted note rows to array of strings where
+  # each string represents a row. For example:
+  #
+  # ['C00000000000','0D00000000000','C000000000000']
+   
   def notes_to_char_string_array
     rows = []
     
@@ -201,11 +206,19 @@ helpers do
     end
     rows
   end
-  
+
+  # Transform submitted notes to one long string. Each row
+  # is separated with comma. For example:
+  #
+  # 'C00000000000,0D00000000000,C000000000000'
+    
   def notes_to_char_string_csv
     notes_to_char_string_array.join(',')
   end
   
+  # Helper method for above. Returns string of zeroes:
+  #
+  # '0000000000000'
   def empty_row_of_notes
     empty_row = '';
     NOTES.length.times do

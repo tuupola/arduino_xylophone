@@ -1,8 +1,0 @@
-<p>
-  <% @songs.each do |song| %>
-  <p>
-  <%= song.id %><br />
-  <%= song.data.gsub(',', '<br />') || @song.data %>
-  </p>
-  <% end %>
-</p>
