@@ -13,7 +13,6 @@
  
 $(function() {
     
-    
     if ($('#video').size()) {
         /* Show player only if video has been uploaded to webserver. */
         var ajax_url = '/song/ajax/' + $('#video').attr('title');

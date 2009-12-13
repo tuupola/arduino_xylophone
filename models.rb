@@ -25,6 +25,7 @@ class Song < Sequel::Model
   def file_path
     File.join(File.dirname(__FILE__), 'public', 'system', 'rsync', self.file_name)  
   end
+    
 end
 
 DB.create_table? :greetings do
