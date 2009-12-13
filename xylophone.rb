@@ -25,16 +25,14 @@ NOTES = 'CDEFGABcdefga'
 
 configure :development do
   DB = Sequel.sqlite('xylophone.db')
+  LOGGER = Logger.new("sinatra.log") 
   set :smtp_server, 'mail.neti.ee'
 end
 
 configure :production do
   DB = Sequel.sqlite('../../shared/xylophone.db')  
+  LOGGER = Logger.new("../../logs/sinatra_log") 
   set :smtp_server, 'bouncer.taevas.com'
-end
-
-configure do
-  LOGGER = Logger.new("sinatra.log") 
 end
 
 load 'models.rb'
