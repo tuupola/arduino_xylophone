@@ -20,22 +20,23 @@
 
 #include <ctype.h>
 
-#define SD21   0x61
-#define HAMMER_THROW 15 /* How low hammer hits. */
-#define HAMMER_TIME  19 /* How long hammer stays down. Can't touch this! */
-#define TEMPO  200
-#define LED    13
-#define SERVO_CENTER 118
+#define LED    13        /* Blinking led is in pin 13. */
 
-#define COMPLETE 0
+#define SD21   0x61      /* Address of servo controller in I2C bus. */
+#define TEMPO  200      
+#define HAMMER_THROW 15  /* How low hammer hits. */
+#define HAMMER_TIME  19  /* How long hammer stays down. Can't touch this! */
+#define SERVO_CENTER 118 /* Starting height of the hammers. */
+
+#define COMPLETE  0
 #define CONNECTED 1
-#define NEW_SONG 2
+#define NEW_SONG  2
 #define RECORDING 3
 
 int status = COMPLETE;
 
-byte mac[]    = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-byte server[] = {192, 168, 1, 65};
+byte mac[]    = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}; /* Arduino MAC address. */
+byte server[] = {192, 168, 1, 65}; /* Webserver IP address. */
 
 int servo[] = {0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b};
 int servo_adjust[] = {-3, +8, -20, +17, -2, +15, -18, +4, -7, +16, -18, +19, +6};
@@ -51,16 +52,17 @@ String servo_test2      = "C,C,C,C,C,C,C,C,D,D,D,D,D,D,D,D,E,E,E,E,E,E,E, ";
 
 String twinkle_twinkle = "C,C,G,G,A,A,G, ,F,F,E,E,D,D,C, ,G,G,F,F,E,E,D, ,G,G,F,F,E,D,C, ";
 
-String song;
-String song_id;
+String song;     /* Song data received from webserver. */ 
+String song_id;  /* Song id of the above song. */
 
 void setup(){
     Serial.begin(115200);
-  
     Serial.println("debug:Starting Arduino.");
 
+    /* Request IP address from DHCP... */
     int dhcp_result = Dhcp.beginWithDHCP(mac);
-  
+    
+    /* ... and print it out for debugging purposes. */
     if (1 == dhcp_result)  {
         byte dhcp_data[4];
         char ip[4];
@@ -87,7 +89,7 @@ void setup(){
     pinMode(LED, OUTPUT);     
     center_all_servos();
 
-
+    /* Run servo tests on startup. */
     delay(1000);    
     Serial.println("debug:First servo test.");
     play(servo_test, 200);
@@ -100,27 +102,30 @@ void setup(){
 }
 
 void loop() {
+    /* Blink led so we know Arduino is alive. */
     digitalWrite(LED, HIGH);
-    //int result = memoryTest();
-    //Serial.print("debug:Memory ");
-    //Serial.print(result,DEC);
-    //Serial.println(" bytes free");
 
     switch (status) {
+        /* Connect to webserver. */
         case COMPLETE:
             connect();
             break;
+        /* If connected request next song and disconnect. */
         case CONNECTED:
             request_next_song();
             delay(1000);
             disconnect();
             break;
+        /* Instruct MacBook to start recording and play the song. */    
         case NEW_SONG:
             record_song();                
             break;
+        /* Wait until MacBook tells it has finished recording. */
         case RECORDING:
             wait_for_laptop();
     }
+
+    /* Blink led so we know Arduino is alive. */
     digitalWrite(LED, LOW);
     center_all_servos();
     delay(5000);
@@ -170,20 +175,24 @@ void request_next_song() {
         Serial.println("debug:No new songs.");
         status = COMPLETE;
     }
-    //Serial.println(song);
 }
 
 void record_song() {
     status = RECORDING;
+    
+    /* Tell MacBook to start recording. */
     Serial.print("record:song-");
     Serial.print(song_id);
     Serial.println(".mov");
+    
     /* Delay 5 seconds for webcam to catch up. */
     delay(5000);
+    
+    /* Play song twice. */
     play(song, TEMPO);
     play(song, TEMPO);
-    //play(jingle_bells, TEMPO);
-    //play(jingle_bells, TEMPO);
+
+    /* Tell MacBook to stop recording. */
     Serial.print("stop:song-");
     Serial.print(song_id);
     Serial.println(".mov");
@@ -191,6 +200,8 @@ void record_song() {
 
 void wait_for_laptop() {
     Serial.println("debug:Waiting for laptop to be ready.");
+    
+    /* MacBook tells it is ready by sending character 'c'. */
     while (Serial.available() > 0) {
         if (Serial.read() == 'c') {
             status = COMPLETE;
@@ -199,17 +210,17 @@ void wait_for_laptop() {
     }
 }
 
-/*
+/* Play single note in simple mode. */
 void note(char s) {
     int i = notes.indexOf(s);
     if (-1 != i) {
         hammer_down();
-        delay(50);
+        delay(HAMMER_TIME);
         hammer_up();
     }
 }
-*/
 
+/* Hits the hammer down for given note. */
 void hammer_down(char s) {
     int i = notes.indexOf(s);
     /* Ignore any carbage we might receive. */
@@ -222,6 +233,7 @@ void hammer_down(char s) {
     }
 }
 
+/* Moves hammer of given note back up. */
 void hammer_up(char s) {
     int i = notes.indexOf(s);
     /* Ignore any carbage we might receive. */
@@ -235,7 +247,6 @@ void hammer_up(char s) {
 
 void play(char *s, int tempo) {
     int l = strlen(s);
-    //Serial.print("Debug:");
     for (int x = 0; x < l; x++) {
         if (',' == s[x]) {
             delay(HAMMER_TIME);
@@ -245,7 +256,6 @@ void play(char *s, int tempo) {
             hammer_down(s[x]);            
         }
     }
-    //Serial.println();
 }
 
 void center_all_servos() {
@@ -255,22 +265,5 @@ void center_all_servos() {
         Wire.send(SERVO_CENTER + servo_adjust[i]);
         Wire.endTransmission();
     }
-}
-
-// this function will return the number of bytes currently free in RAM
-int memoryTest() {
-  int byteCounter = 0; // initialize a counter
-  byte *byteArray; // create a pointer to a byte array
-  // More on pointers here: http://en.wikipedia.org/wiki/Pointer#C_pointers
-
-  // use the malloc function to repeatedly attempt allocating a certain number of bytes to memory
-  // More on malloc here: http://en.wikipedia.org/wiki/Malloc
-  while ( (byteArray = (byte*) malloc (byteCounter * sizeof(byte))) != NULL ) {
-    byteCounter++; // if allocation was successful, then up the count for the next try
-    free(byteArray); // free memory after allocating it
-  }
-  
-  free(byteArray); // also free memory after the function finishes
-  return byteCounter; // send back the highest number of bytes successfully allocated
 }
 
