@@ -15,6 +15,7 @@ require 'sinatra'
 require 'erb'
 require 'sequel'
 require 'pony'
+require 'logger'
 
 #
 # Setup
@@ -32,6 +33,10 @@ configure :production do
   set :smtp_server, 'bouncer.taevas.com'
 end
 
+configure do
+  LOGGER = Logger.new("sinatra.log") 
+end
+
 load 'models.rb'
 
 #
@@ -40,22 +45,50 @@ load 'models.rb'
 
 # Get list of songs in queue.
 get '/queue' do
-  @songs = Song.dataset.filter(:status => ['NEW']).order(:id)
+  @songs = Song.filter(:status => ['NEW']).order(:id)
   erb :queue
 end
 
-# Get next song from queue.
+# Get next song from queue. Also check if any new songs
+# are uploaded to webserver and send notification email.
 get '/next' do
-  @song = Song.dataset.filter(:status => ['NEW']).order(:id).first
+  
+  # Use request as poor mans cron for sending notification
+  # of new video files recently rsynced to webserver.
+  recording = Song.filter(:status => ['RECORDING'])
+  recording.each do |@song|
+    # If we have video file send the email.
+    if File.exists?(@song.file_path)
+      begin
+        Pony.mail :to => @song.email, 
+                  :from => 'webmaster@taevas.ee',
+                  :subject => 'Your song is ready',
+                  :body => erb(:notification_email, :layout => false),
+                  :via => :smtp, 
+                  :smtp => {
+                      :host   => options.smtp_server
+                  } 
+        @song.status = 'DONE'
+        logger.debug "Sent email to " + @song.email + 
+                     " with song id " + @song.id.to_s + "."
+
+      # Probably broken email address. Log and forget.
+      rescue Exception => e
+        logger.debug "Sending mail to " + @song.email + " failed."
+        @song.status = 'EMAIL_FAILED'
+      end      
+      @song.save
+    end
+  end
+
+  # Give next from the queue to Arduino.
+  @song = Song.filter(:status => ['NEW']).order(:id).first
   if @song
     @song.status = 'RECORDING'
     @song.save
     erb :song_txt, :layout => false
-  end
-end
+  end  
 
-# Remove song from queue.
-get '/done/:id' do
 end
 
 #
@@ -68,7 +101,7 @@ get '/' do
 end
 
 # New song editor.
-get '/song' do
+get '/song/?' do
   @title = 'More jingle bells soon at theatre near you!'
   @notes = NOTES.split(//)
   @width = NOTES.length * 16
@@ -181,5 +214,8 @@ helpers do
     empty_row
   end
   
+  def logger
+    LOGGER
+  end  
   
 end
