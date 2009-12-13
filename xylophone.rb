@@ -28,38 +28,11 @@ configure :development do
 end
 
 configure :production do
-  DB = Sequel.sqlite('/export/www/xylophone.taevas.ee/shared/xylophone.db')  
+  DB = Sequel.sqlite('../../shared/xylophone.db')  
   set :smtp_server, 'bouncer.taevas.com'
 end
 
-DB.create_table? :songs do
-  primary_key :id
-  String :data
-  String :email
-  String :status
-end
-
-class Song < Sequel::Model
-end
-
-DB.create_table? :greetings do
-  primary_key :id
-  Integer :song_id
-  String :from
-  String :user
-  String :to
-  String :friend
-  String :message
-end
-
-class Greeting < Sequel::Model
-  many_to_one :song
-  
-  def url
-    'http://xylophone.taevas.ee/greeting/' + self.id.to_s
-  end
-  
-end
+load 'models.rb'
 
 #
 # For arduino
@@ -75,7 +48,7 @@ end
 get '/next' do
   @song = Song.dataset.filter(:status => ['NEW']).order(:id).first
   if @song
-    @song.status = 'DONE'
+    @song.status = 'RECORDING'
     @song.save
     erb :song_txt, :layout => false
   end
@@ -102,7 +75,7 @@ get '/song' do
   erb :editor
 end
 
-# Save new song to dabase.
+# Save new song to database.
 post '/song' do
   @song = Song.create(:data => notes_to_char_string_csv, 
                       :status => 'NEW', 
@@ -121,10 +94,10 @@ get '/song/:id' do
 end
 
 # Show player if video file exists else return 404.
+# This gets called with jQuery.load()
 get '/song/ajax/:id' do
-  @file_name = 'song-' + params[:id] + '.mov'
-  path = File.join(File.dirname(__FILE__), 'public', 'system', 'rsync', @file_name)
-  if File.exists?(path) 
+  @song = Song[params[:id]]
+  if File.exists?(@song.file_path) 
     @song = Song[params[:id]]
     erb :ajax_song, :layout => false
   else
@@ -145,11 +118,11 @@ end
 # Save new greeting to dabase.
 post '/greeting' do
   @greeting = Greeting.create(:song_id => params[:song_id], 
-                            :from => params[:from],
-                            :user => params[:user],
-                            :to => params[:to],
-                            :friend => params[:friend],
-                            :message => params[:message])
+                              :from => params[:from],
+                              :user => params[:user],
+                              :to => params[:to],
+                              :friend => params[:friend],
+                              :message => params[:message])
 
   Pony.mail :to => @greeting.to, 
             :from => @greeting.from, 
