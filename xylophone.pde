@@ -36,7 +36,7 @@
 int status = COMPLETE;
 
 byte mac[]    = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}; /* Arduino MAC address. */
-byte server[] = {192, 168, 1, 65}; /* Webserver IP address. */
+byte server[] = {212, 47, 219, 73}; /* Webserver IP address. */
 
 int servo[] = {0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b};
 int servo_adjust[] = {-3, +8, -20, +17, -2, +15, -18, +4, -7, +16, -18, +19, +6};
