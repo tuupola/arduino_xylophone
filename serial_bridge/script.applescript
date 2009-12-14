@@ -82,6 +82,9 @@ end MyProcessSerialData
 on startCommunication(connectionName)
 	tell application "Serial Bridge"
 		
+		-- Notify Arduino we are here
+		send to source connectionName string "c"
+		
 		-- Loop forever: wait for data, read it, process it, and optionally send
 		-- out serial data.
 		repeat while true

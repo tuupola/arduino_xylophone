@@ -8,6 +8,6 @@
 	<SerialStopBits type="string">1</SerialStopBits>
 	<SerialFlowControl type="string">1</SerialFlowControl>
 	<SerialParity type="string">1</SerialParity>
-	<LogAllInputOutput type="string">true</LogAllInputOutput>
-	<WindowPos type="string">24 52</WindowPos>
+	<LogAllInputOutput type="string">false</LogAllInputOutput>
+	<WindowPos type="string">83 57</WindowPos>
 </Database>
