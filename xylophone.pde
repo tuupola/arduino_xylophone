@@ -214,9 +214,9 @@ void wait_for_laptop() {
 void note(char s) {
     int i = notes.indexOf(s);
     if (-1 != i) {
-        hammer_down();
+        hammer_down(s);
         delay(HAMMER_TIME);
-        hammer_up();
+        hammer_up(s);
     }
 }
 
