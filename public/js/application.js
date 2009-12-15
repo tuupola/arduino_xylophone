@@ -23,7 +23,7 @@ $(function() {
         }, 5000);
 
 
-        /* If video was found stop checking. */
+        /* If video was found stop checking and start player. */
         $('#video').ajaxComplete(function(request, settings){
             if (settings.status===404){
                 $('#video').html('<img src="/img/spinner.gif" id="spinner" />')
@@ -35,7 +35,7 @@ $(function() {
     }
     
      
-    /* Initialize Soundmanager.*/
+    /* Initialize Soundmanager for preview sounds.*/
     soundManager.debugMode = false;    
     soundManager.url = '/swf/';
 
@@ -93,7 +93,7 @@ $(function() {
                 id: 'a',
                 url: '/sound/a2.mp3'
             }); 
-        }
+        }        
     });
         
     /* Highlight all checked notes when user clicks back button. */
@@ -102,7 +102,7 @@ $(function() {
     });
     
     /* Handle clicks on notes. */
-    $('.editor img').click(function() {
+    $('#editor img').click(function() {
         //console.log($(this).prev().val());
 
         /* Play a preview sound when note is clicked. */
@@ -141,5 +141,6 @@ $(function() {
         }
         
     });
+    
     
 });
