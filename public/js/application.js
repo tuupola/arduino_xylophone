@@ -63,11 +63,11 @@ $(function() {
             });
             soundManager.createSound({
                 id: 'A',
-                url: '/sound/a2.mp3'
+                url: '/sound/a1.mp3'
             });
             soundManager.createSound({
                 id: 'B',
-                url: '/sound/b2.mp3'
+                url: '/sound/b1.mp3'
             });
             soundManager.createSound({
                 id: 'c',
@@ -83,15 +83,15 @@ $(function() {
             });
             soundManager.createSound({
                 id: 'f',
-                url: '/sound/f_1.mp3'
+                url: '/sound/f2.mp3'
             });
             soundManager.createSound({
                 id: 'g',
-                url: '/sound/g_1.mp3'
+                url: '/sound/g2.mp3'
             });
             soundManager.createSound({
                 id: 'a',
-                url: '/sound/a_2.mp3'
+                url: '/sound/a2.mp3'
             }); 
         }
     });
