@@ -26,7 +26,7 @@
 #define TEMPO  200      
 #define HAMMER_THROW 15  /* How low hammer hits. */
 #define HAMMER_TIME  19  /* How long hammer stays down. Can't touch this! */
-#define SERVO_CENTER 118 /* Starting height of the hammers. */
+#define SERVO_CENTER 119 /* Starting height of the hammers. */
 
 #define COMPLETE  0
 #define CONNECTED 1
@@ -39,7 +39,7 @@ byte mac[]    = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}; /* Arduino MAC address. */
 byte server[] = {212, 47, 219, 73}; /* Webserver IP address. */
 
 int servo[] = {0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b};
-int servo_adjust[] = {-3, +8, -20, +17, -2, +15, -18, +4, -7, +16, -18, +19, +6};
+int servo_adjust[] = {-7, +8, -20, +17, -3, +17, -18, +4, -6, +15, -18, +19, +5};
 int num_servos = 13;
 
 Client client(server, 4567);
@@ -97,8 +97,11 @@ void setup(){
     play(servo_test, 100);
     Serial.println("debug:Third servo test.");
     play(servo_test, 80);
-    delay(1000);    
+    delay(1000);  
 
+    play(jingle_bells, 200);
+    delay(1000);  
+  
 }
 
 void loop() {
@@ -192,6 +195,9 @@ void record_song() {
     play(song, TEMPO);
     play(song, TEMPO);
 
+    /* Add some silence to the end of the video. */
+    delay(3000);
+
     /* Tell MacBook to stop recording. */
     Serial.print("stop:song-");
     Serial.print(song_id);
@@ -256,6 +262,8 @@ void play(char *s, int tempo) {
             hammer_down(s[x]);            
         }
     }
+    center_all_servos();
+
 }
 
 void center_all_servos() {
