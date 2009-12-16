@@ -108,7 +108,7 @@ end
 
 # Show a greeting.
 get '/greeting/:id' do
-  @greeting = Greeting[params[:id]]
+  @greeting = Greeting[params[:id].to_i(36) - 10000]
   if @greeting
     erb :greeting
   else
@@ -116,7 +116,7 @@ get '/greeting/:id' do
   end
 end
 
-# Save new greeting to dabase.
+# Save new greeting to database.
 post '/greeting' do
   @greeting = Greeting.create(:song_id => params[:song_id], 
                               :from => params[:from],
@@ -134,7 +134,7 @@ post '/greeting' do
                 :host   => options.smtp_server
             }
 
-    redirect '/greeting/' + @greeting.id.to_s
+    redirect '/greeting/' + (@greeting.id + 10000).to_s(36)
 end
 
 

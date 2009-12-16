@@ -27,7 +27,7 @@ class Song < Sequel::Model
   end
   
   def url
-    'http://xylophone.taevas.ee/song/' + self.id.to_s
+    'http://xylophone.taevas.ee/song/' + self.id.to_s 
   end
     
 end
@@ -46,7 +46,7 @@ class Greeting < Sequel::Model
   many_to_one :song
   
   def url
-    'http://xylophone.taevas.ee/greeting/' + self.id.to_s
+    'http://xylophone.taevas.ee/greeting/' + (self.id + 10000).to_s(36)
   end
   
 end
