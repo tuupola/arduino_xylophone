@@ -39,10 +39,8 @@ $(function() {
     soundManager.debugMode = false;    
     soundManager.url = '/swf/';
     
-    soundManager.defaultOptions = {
-      autoLoad: true
-    };
-    
+    soundManager.defaultOptions.autoLoad = true;
+        
     soundManager.onready(function(status) {
         if (status.success) {
             soundManager.createSound({
