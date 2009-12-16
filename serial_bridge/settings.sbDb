@@ -9,5 +9,5 @@
 	<SerialFlowControl type="string">1</SerialFlowControl>
 	<SerialParity type="string">1</SerialParity>
 	<LogAllInputOutput type="string">false</LogAllInputOutput>
-	<WindowPos type="string">83 57</WindowPos>
+	<WindowPos type="string">21 52</WindowPos>
 </Database>
