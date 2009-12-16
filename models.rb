@@ -25,6 +25,10 @@ class Song < Sequel::Model
   def file_path
     File.join(File.dirname(__FILE__), 'public', 'system', 'rsync', self.file_name)  
   end
+  
+  def url
+    'http://xylophone.taevas.ee/song/' + self.id.to_s
+  end
     
 end
 
