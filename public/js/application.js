@@ -35,10 +35,14 @@ $(function() {
     }
     
      
-    /* Initialize Soundmanager for preview sounds.*/
+    /* Initialize Soundmanager for preview sounds. */    
     soundManager.debugMode = false;    
     soundManager.url = '/swf/';
-
+    
+    soundManager.defaultOptions = {
+      autoLoad: true
+    };
+    
     soundManager.onready(function(status) {
         if (status.success) {
             soundManager.createSound({
@@ -153,10 +157,10 @@ $(function() {
                 preview_notes.push(' ');                
             }
         });
-        console.log(preview_notes);
+        //console.log(preview_notes);
         var i = 0;
         var interval = setInterval(function() {
-            console.log(preview_notes[i]);
+            //console.log(preview_notes[i]);
             soundManager.play(preview_notes[i++]);
             if (i == preview_notes.length) {
                 clearInterval(interval);
