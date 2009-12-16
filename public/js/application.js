@@ -26,7 +26,7 @@ $(function() {
         /* If video was found stop checking and start player. */
         $('#video').ajaxComplete(function(request, settings){
             if (settings.status===404){
-                $('#video').html('<img src="/img/spinner.gif" id="spinner" />')
+                $('#video').html('<img src="/img/spinner.gif" id="spinner" />');
             } else {
                 clearInterval(interval_id);
                 flowplayer("player", "/swf/flowplayer-3.1.5.swf");            
@@ -131,7 +131,7 @@ $(function() {
                 var new_name = $(input).attr('name')
                                        .replace(/notes\[\d*\]/, 'notes[' + num_rows + ']');
                 $(input).attr('name', new_name);
-            })
+            });
             $('img', new_row).removeClass('play');
             $('input', new_row).removeAttr('checked');
             new_row.css('display', 'none');
@@ -142,5 +142,27 @@ $(function() {
         
     });
     
+    $('#preview').click(function(){
+        var preview_notes = [];
+        $('#editor > span').each(function() {
+            if ($(':checked', this).size()) {
+                $(':checked', this).each(function() {
+                    preview_notes.push($(this).val());
+                });                
+            } else {
+                preview_notes.push(' ');                
+            }
+        });
+        console.log(preview_notes);
+        var i = 0;
+        var interval = setInterval(function() {
+            console.log(preview_notes[i]);
+            soundManager.play(preview_notes[i++]);
+            if (i == preview_notes.length) {
+                clearInterval(interval);
+            } 
+        }, 220);
+        
+    });
     
 });
