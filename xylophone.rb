@@ -119,21 +119,30 @@ end
 
 # Save new greeting to database.
 post '/greeting' do
-  @greeting = Greeting.create(:song_id => params[:song_id], 
-                              :from => params[:from],
-                              :user => params[:user],
-                              :to => params[:to],
-                              :friend => params[:friend],
-                              :message => params[:message])
+  
+  # Email addresses separated by space or comma
+  params[:to].split(/[ ,]+/).each do |to| 
+    to.strip
 
-  Pony.mail :to => @greeting.to, 
-            :from => @greeting.from, 
-            :subject => 'Sõnum Taevast!',
-            :body => erb(:email, :layout => false),
-            :via => :smtp, 
-            :smtp => {
-                :host   => options.smtp_server
-            }
+    @greeting = Greeting.create(:song_id => params[:song_id], 
+                                :from => params[:from],
+                                :user => params[:user],
+                                :to => to,
+                                :friend => params[:friend],
+                                :message => params[:message])
+
+    Pony.mail :to => @greeting.to, 
+              :from => @greeting.from, 
+              :subject => 'Sõnum Taevast!',
+              :body => erb(:email, :layout => false),
+              :via => :smtp, 
+              :smtp => {
+                  :host   => options.smtp_server
+              }
+    
+    logger.debug "Greeting from " + @greeting.from + "to " +  @greeting.to 
+  end
+  
 
     redirect '/greeting/' + (@greeting.id + 10000).to_s(36)
 end
