@@ -1,15 +1,107 @@
-<form id="editor_form" action="/song" method="post">
-  <div id="editor" style="width: <%= @width %>px">
-    <% 30.times do |i| %>
-      <span>
-      <% @notes.each_index do |j| %>
-        <input type="checkbox" name="notes[<%=i%>][<%=j%>]" value="<%=@notes.at(j)%>"  />
-        <img src="/img/ball-16x16.png" class="<%=@notes.at(j)%>" />
-      <% end %>
-      </span>
-    <% end %>
-    Email: <input type="text" name="email" />
-    <input type="submit" />
-    <input type="button" id="preview" value="preview" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Püha Taevas</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" rel="stylesheet" href="css/base.css" media="screen" />
+<!--[if lte IE 6]>
+<style type="text/css">
+
+img {
+behavior:url("inc/iepngfix.htc");
+}
+
+</style>
+<![endif]--> 
+</head>
+<body class="create">
+
+  <div id="taevas">
+    <p><a href="http://www.taevas.ee/"><span>www.taevas.ee</span></a></p>
   </div>
-</form>
+
+  <!-- #container start -->
+  <div id="container">
+  <div id="containerSpan">
+
+    <!-- #header start -->
+    <div id="header">
+
+      <h1><a href="/"><span>Püha Taevas</span></a></h1>
+      <div id="intro">
+        <h2>Sinu ees on Püha Instrumendi pärgament. </h2>
+      </div>
+
+    </div>
+    <!-- #header end -->
+
+    <!-- #content start -->
+    <div id="content">
+
+      <div id="instruction">
+        <p>Pane siia kirja oma kõige pühamad soovid ja sisemine hääl.</p>
+        <p class="p2">Madalamad mörinad leiad vasakult, kõrged kilinad paremalt. Noodid sea ritta ülevalt alla, moodustades soovitud viisijupi.</p>
+        <p>Kui õige lugu valmis, pane kirja oma loomingu pealkiri ja enda e-posti aadress. Nüüd ei olegi rohkem vaja, kui vajuta nuppu “Valmista” ja Taeva Püha Instrument asub tööle.</p>
+        <p>Mõne hetke pärast on Sinu lugu ekraanil ja e-postkastis videojäädvustus, mida valitutega jagada.</p>
+      </div>
+
+      <form id="editor_form" action="/song" method="post">
+
+        <div id="editor">
+
+      <span class="letters">
+        <p>C D E F G A H C D E F G A</p>
+      </span>
+
+
+      <% 30.times do |i| %>
+        <span>
+        <% @notes.each_index do |j| %>
+          <input type="checkbox" name="notes[<%=i%>][<%=j%>]" value="<%=@notes.at(j)%>"  />
+          <img src="/img/ball-16x16.png" class="<%=@notes.at(j)%>" />
+        <% end %>
+        </span>
+      <% end %>
+
+
+
+        </div>
+
+        <div id="send">
+          <table width="100%">
+            <tr>
+              <td><label for="fTitle">Loo pealkiri:</label></td>
+            </tr>
+            <tr>
+              <td class="field"><input type="text" class="text" name="fTitle" id="fTitle" style="width:155px;" /></td>
+            </tr>
+            <tr>
+              <td><label for="fEmail">Sinu e-post:</label></td>
+            </tr>
+            <tr>
+              <td class="field"><input type="text" class="text" name="fEmail" id="fEmail" style="width:155px;" /></td>
+            </tr>
+            <tr>
+              <td><input type="submit" class="submit" value="Valmista" /></td>
+            </tr>
+          </table>
+        </div>
+
+      </form>
+
+      <div class="clearer"></div>
+
+    </div>
+    <!-- #content end -->
+
+  </div>
+  </div>
+  <!-- #container end -->
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>  
+  <script src="/js/flowplayer-3.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/soundmanager2.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/application.js" type="text/javascript" charset="utf-8"></script>
+
+</body>
+</html>

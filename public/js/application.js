@@ -13,27 +13,27 @@
  
 $(function() {
     
-    if ($('#video').size()) {
+    if ($('#videoSpan').size()) {
         /* Show player only if video has been uploaded to webserver. */
-        var ajax_url = '/song/ajax/' + $('#video').attr('title');
+        var ajax_url = '/song/ajax/' + $('#videoSpan').attr('title');
 
         /* Check every 5 seconds if video has been uploaded. */
+
         var interval_id = setInterval(function() {
-            $('#video').load(ajax_url);
+            $('#videoSpan').load(ajax_url);
         }, 5000);
 
-
         /* If video was found stop checking and start player. */
-        $('#video').ajaxComplete(function(request, settings){
+
+        $('#videoSpan').ajaxComplete(function(request, settings){
             if (settings.status===404){
-                $('#video').html('<img src="/img/spinner.gif" id="spinner" />');
+                $('#videoSpan').html('<img src="/img/spinner.gif" id="spinner" />');
             } else {
                 clearInterval(interval_id);
                 flowplayer("player", "/swf/flowplayer-3.1.5.swf");            
             }
         }).load(ajax_url);        
     }
-    
      
     /* Initialize Soundmanager for preview sounds. */    
     soundManager.debugMode = false;    
