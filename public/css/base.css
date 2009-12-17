@@ -49,7 +49,8 @@ margin:0;
 padding:0;
 }
 
-input.text {
+input.text,
+textarea {
 margin-bottom:10px;
 border-top:none;
 border-left:1px solid #5e6e55;
@@ -59,6 +60,10 @@ padding:2px 4px 2px 4px;
 background:transparent;
 font-family:Georgia,"Times New Roman",Times,serif;
 font-size:13px;
+}
+
+textarea {
+overflow-y:auto;
 }
 
 input.submit {
@@ -377,6 +382,16 @@ color:#335223;
 
 #video {
 height:539px;
+}
+
+#videoSpan {
+margin:30px 0 0 48px;
+width:640px;
+height:480px;
+}
+
+#videoSpan img {
+display:block;
 }
 
 #pad {

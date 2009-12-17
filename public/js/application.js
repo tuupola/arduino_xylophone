@@ -27,7 +27,7 @@ $(function() {
 
         $('#videoSpan').ajaxComplete(function(request, settings){
             if (settings.status===404){
-                $('#videoSpan').html('<img src="/img/spinner.gif" id="spinner" />');
+                $('#videoSpan').html('<img src="/img/angel.gif" id="spinner" />');
             } else {
                 clearInterval(interval_id);
                 flowplayer("player", "/swf/flowplayer-3.1.5.swf");            
