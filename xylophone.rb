@@ -128,7 +128,7 @@ post '/greeting' do
 
   Pony.mail :to => @greeting.to, 
             :from => @greeting.from, 
-            :subject => 'Xylophone from Inttertubes',
+            :subject => 'Sõnum Taevast!',
             :body => erb(:email, :layout => false),
             :via => :smtp, 
             :smtp => {
@@ -164,7 +164,7 @@ helpers do
         begin
           Pony.mail :to => @song.email, 
                     :from => 'webmaster@taevas.ee',
-                    :subject => 'Your song is ready',
+                    :subject => 'Sinu Taevalik video',
                     :body => erb(:notification_email, :layout => false),
                     :via => :smtp, 
                     :smtp => {
