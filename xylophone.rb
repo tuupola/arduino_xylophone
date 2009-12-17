@@ -80,6 +80,7 @@ end
 post '/song' do
   @song = Song.create(:data => notes_to_char_string_csv, 
                       :status => 'NEW', 
+                      :name  => params[:name], 
                       :email => params[:email])
   redirect '/song/' + @song.id.to_s
 end

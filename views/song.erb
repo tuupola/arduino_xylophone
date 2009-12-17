@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Püha Taevas</title>
+<title><%= @song.name %></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link type="text/css" rel="stylesheet" href="/css/base.css" media="screen" />
 <!--[if lte IE 6]>
@@ -44,7 +44,7 @@ behavior:url("inc/iepngfix.htc");
 
       <h1><a href="/"><span>Püha Taevas</span></a></h1>
       <div id="intro">
-        <h2>“LOO NIMI.”</h2>
+        <h2>“<%= @song.name %>”</h2>
       </div>
 
     </div>
@@ -67,7 +67,7 @@ behavior:url("inc/iepngfix.htc");
           <table width="100%">
             <tr>
               <td width="32%"><label for="fName">Sinu nimi:</label></td>
-              <td width="68%"><input type="text" class="text" name="fName" id="fName" style="width:165px;" /></td>
+              <td width="68%"><input type="text" class="text" name="user" id="fName" style="width:165px;" /></td>
             </tr>
             <tr>
               <td width="32%"><label for="fEmail" class="error">Sinu e-post:</label></td>
@@ -101,7 +101,7 @@ behavior:url("inc/iepngfix.htc");
       <div id="menu">
       <div id="menuSpan">
         <p>
-          <a href="#" id="lDownload"><span>Tõmba see Püha Lugu oma raali.</span></a>
+          <a href="/system/rsync/<%= @song.file_name %>" id="lDownload"><span>Tõmba see Püha Lugu oma raali.</span></a>
           <a href="/song" id="lCreate"><span>Loo uus lugu Taeva Pühal Instrumendil.</span></a>
         </p>
       </div>
