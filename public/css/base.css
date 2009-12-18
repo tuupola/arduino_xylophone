@@ -345,10 +345,9 @@ color:#354230;
 }
 
 #editor {
+position:relative;
 padding:0 54px 0 50px;
-height:auto !important;
 min-height:532px;
-height:532px;
 width:210px;
 background:url("../img/bg_editor.jpg") no-repeat top left;
 color:#fff;
@@ -357,6 +356,7 @@ color:#fff;
 #editor span {
 display:block;
 width:210px;
+clear:both;
 }
 
 #editor img {
@@ -370,6 +370,7 @@ cursor:pointer;
 
 #editor img.play {
 opacity:1.0;
+filter:alpha(opacity=100);
 }
 
 #editor input[type="checkbox"] {
@@ -429,5 +430,8 @@ background:url("../img/bg_pad_top.gif") no-repeat top left;
 
 #padSpan2 {
 padding:0 160px 40px 35px;
+height:auto !important;
+height:130px;
+min-height:130px;
 background:url("../img/bg_pad_bottom.gif") no-repeat bottom left;
 }

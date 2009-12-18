@@ -140,7 +140,7 @@ post '/greeting' do
                   :host   => options.smtp_server
               }
     
-    logger.debug "Greeting from " + @greeting.from + "to " +  @greeting.to 
+    logger.debug "Greeting from " + @greeting.from + " to " +  @greeting.to 
   end
   
 
