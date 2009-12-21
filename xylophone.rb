@@ -148,6 +148,13 @@ post '/greeting' do
 end
 
 
+# Show a random song
+get '/random' do
+  @song = Song[1]
+  erb :random  
+end
+
+
 
 get '/about' do
   "I'm running on Sinatra " + Sinatra::VERSION
