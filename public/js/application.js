@@ -127,7 +127,8 @@ $(function() {
         
         /* If we are at last or sedond last row add a new row. */
         if (0 == $(this).parent().next('span').size()) {
-            var num_rows = $('#editor_form > span').size();
+            var num_rows = $('#editor > span.notes').size();
+            console.log(num_rows);
             var new_row  = $(this).parent().clone(true);
             $(':input', new_row).each(function(key, input) {
                 var new_name = $(input).attr('name')

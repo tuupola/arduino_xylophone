@@ -55,7 +55,7 @@ behavior:url("inc/iepngfix.htc");
 
 
       <% 30.times do |i| %>
-        <span>
+        <span class="notes">
         <% @notes.each_index do |j| %>
           <input type="checkbox" name="notes[<%=i%>][<%=j%>]" value="<%=@notes.at(j)%>"  />
           <img src="/img/ball-16x16.png" class="<%=@notes.at(j)%>" />
