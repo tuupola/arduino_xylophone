@@ -150,7 +150,7 @@ end
 
 # Show a random song
 get '/random' do
-  @song = Song[1]
+  @song = Song[rand(1 + Song.dataset.count)]
   erb :random  
 end
 
