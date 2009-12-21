@@ -17,11 +17,11 @@ $(function() {
         /* Show player only if video has been uploaded to webserver. */
         var ajax_url = '/song/ajax/' + $('#videoSpan').attr('title');
 
-        /* Check every 5 seconds if video has been uploaded. */
+        /* Check every 10 seconds if video has been uploaded. */
 
         var interval_id = setInterval(function() {
             $('#videoSpan').load(ajax_url);
-        }, 5000);
+        }, 10000);
 
         /* If video was found stop checking and start player. */
 
