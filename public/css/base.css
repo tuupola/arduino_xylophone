@@ -153,8 +153,8 @@ height:1030px;
 background:url("../img/bg_container_create.jpg") no-repeat top left;
 }
 
-.create #container> #containerSpan {
-background:url("../img/bg_container_create.jpg") no-repeat top left;
+.create #container>#containerSpan {
+background:url("../img/bg_container_create.png") no-repeat top left;
 }
 
 
@@ -353,6 +353,11 @@ background:url("../img/bg_editor.jpg") no-repeat top left;
 color:#fff;
 }
 
+form>#editor {
+padding-bottom:25px;
+background:url("../img/bg_editor.png") no-repeat top left;
+}
+
 #editor span {
 display:block;
 width:210px;
@@ -396,6 +401,12 @@ width:345px;
 height:232px;
 background:url("../img/bg_send.jpg") no-repeat top left;
 color:#335223;
+}
+
+form>#send {
+position:relative;
+margin-top:-15px;
+background:url("../img/bg_send.png") no-repeat top left;
 }
 
 
