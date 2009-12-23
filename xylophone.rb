@@ -99,15 +99,16 @@ post '/song' do
   @song = Song.create(:data => notes_to_char_string_csv, 
                       :status => 'NEW', 
                       :name  => params[:name], 
-                      :email => params[:email])
+                      :email => params[:email],
+                      :language => @lang)
   redirect '/song/' + @song.id.to_s
 end
 
 # Show song page if song with given id exists.
 get '/song/:id' do
-  @lang = session['lang']
-  
   @song = Song[params[:id]]
+  @lang = session['lang']
+
   if @song
     erb :song
   else
@@ -133,6 +134,7 @@ get '/greeting/:id' do
   
   @greeting = Greeting[params[:id].to_i(36) - 10000]
   if @greeting
+    @lang = @greeting.song.language
     erb :greeting
   else
     not_found

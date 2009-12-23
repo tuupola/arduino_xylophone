@@ -15,6 +15,7 @@ DB.create_table? :songs do
   String :data
   String :name
   String :email
+  String :language
   String :status
 end
 

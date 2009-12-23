@@ -1,3 +1,13 @@
+<% if 'en' == @lang then %>
+Rejoice, the chosen one, we bring good news form up high. <%= @greeting.user %> has commanded the heavenly forces to play his tune to praise you, your family and all that is holy this season. Behold and enjoy, as the Holy Instrument plays for you:
+
+<%= @greeting.url %>
+
+Be aware, in the eyes of The Holy Instrument, everybody is equal. Everyone who is brave enough can compose their own heavenly melody. Test the Holy Instrument of Taevas and spread the message to those who are worthy. 
+
+Sincerely yours!
+Taevas, also known as Heaven in English-speaking countries. 
+<% else %>
 Lugupeetud väljavalitu!
 
 Lubage teavitada, et Teie sõber <%= @greeting.user %> on helisema pannud Taeva keeled. Pühal Instrumendil mängivad need ülistuslaulu Teile ja Te sugupuule ja kõigele, mis on püha. Tulge ja vaadake, sest rõõmusõnum ootab Teid: 
@@ -8,3 +18,4 @@ Pidage meeles, et Taevas on kõik võrdsed. Siin saavad oma loo luua kõik, kel 
 
 Jõulukuul 2009
 Hääl Taevast!
+<% end %>

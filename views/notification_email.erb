@@ -1,8 +1,17 @@
-Parimad uudised otse Taevast!
-Püha Instrument on oma töö lõpetanud ning Sinu lugu on valmis aadressil
+<% if 'en' == @lang then %>
+We have great news from up above! The Holy Instrument has finished the work on your creation. The recording can now be viewed on the following link:
+
+http://pyha.taevas.ee/song/<%= @song.id.to_s %>
+
+Share it with those who are worthy!
+
+The Holy Instrument and Taevas
+<% else %>
+Parimad uudised otse Taevast! Püha Instrument on oma töö lõpetanud ning Sinu lugu on valmis aadressil
 
 http://pyha.taevas.ee/song/<%= @song.id.to_s %>
 
 Jaga seda väärilistega! 
 Hääl Taevast
+<% end %>
 
