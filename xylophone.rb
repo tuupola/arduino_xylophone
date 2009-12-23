@@ -39,10 +39,6 @@ end
 
 load 'models.rb'
 
-before do
-  @lang = session['lang']
-end
-
 #
 # For arduino
 #
@@ -71,6 +67,8 @@ end
 
 get '/' do
   @title = 'Jingle bells, jingle bells, jingle all the way...'
+  @lang = session['lang']
+  
   erb :index
 end
 
@@ -86,6 +84,8 @@ end
 
 # New song editor.
 get '/song/?' do
+  @lang = session['lang']
+  
   @title = 'More jingle bells soon at theatre near you!'
   @notes = NOTES.split(//)
   @width = NOTES.length * 16
@@ -94,6 +94,8 @@ end
 
 # Save new song to database.
 post '/song' do
+  @lang = session['lang']
+  
   @song = Song.create(:data => notes_to_char_string_csv, 
                       :status => 'NEW', 
                       :name  => params[:name], 
@@ -103,6 +105,8 @@ end
 
 # Show song page if song with given id exists.
 get '/song/:id' do
+  @lang = session['lang']
+  
   @song = Song[params[:id]]
   if @song
     erb :song
@@ -125,6 +129,8 @@ end
 
 # Show a greeting.
 get '/greeting/:id' do
+  @lang = session['lang']
+  
   @greeting = Greeting[params[:id].to_i(36) - 10000]
   if @greeting
     erb :greeting
@@ -166,6 +172,8 @@ end
 
 # Show a random song
 get '/random' do
+  @lang = session['lang']
+  
   @song = Song[rand(1 + Song.dataset.count)]
   erb :random  
 end
