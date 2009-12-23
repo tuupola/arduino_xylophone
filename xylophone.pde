@@ -166,13 +166,13 @@ void request_next_song() {
                 song.append(c);                
             }
         /* Song data starts after we receive = character. */
-        } else if (c == '=') {
+        } else if (c == '>') {
             start_mark_received = true;
         }
     }
     if (song.length() > 0) { 
         status = NEW_SONG;
-        Serial.print("debug:New song with length of ");
+        Serial.print("debug:New song ");
         Serial.print(song.length());
         Serial.println(".");
     } else {

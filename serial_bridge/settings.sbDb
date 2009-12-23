@@ -2,7 +2,7 @@
 <Database type="dict">
 	<AppVers type="string">1.0.9</AppVers>
 	<DatabaseVers type="string">1</DatabaseVers>
-	<SerialPortName type="string">usbserial-A9007MJL</SerialPortName>
+	<SerialPortName type="string">_Offline_</SerialPortName>
 	<SerialPortBaud type="string">10</SerialPortBaud>
 	<SerialDataSize type="string">8</SerialDataSize>
 	<SerialStopBits type="string">1</SerialStopBits>
