@@ -1,0 +1,34 @@
+.home a#lCreate {
+top:45px;
+height:112px;
+background:url("../img/b_create_en.gif") no-repeat top left;
+}
+
+.home a#lOthers {
+top:215px;
+left:18px;
+background:url("../img/b_others_en.gif") no-repeat top left;
+}
+
+
+.view a#lDownload,
+.send a#lDownload {
+top:14px;
+background:url("../img/b_download_en.gif") no-repeat top left;
+}
+
+.view a#lCreate,
+.send a#lCreate {
+width:210px;
+background:url("../img/b_new_en.gif") no-repeat top left;
+}
+
+.home #intro {
+font-size:12px;
+line-height:1.2em;
+}
+
+#instruction {
+line-height:1.3em;
+font-size:12px;
+}

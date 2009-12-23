@@ -3,7 +3,10 @@
 <head>
 <title>Püha Taevas</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link type="text/css" rel="stylesheet" href="css/base.css" media="screen" />
+<link type="text/css" rel="stylesheet" href="/css/base.css" media="screen" />
+<% if 'en' == @lang then %>
+<link type="text/css" rel="stylesheet" href="/css/en.css" media="screen" />
+<% end %>
 <!--[if lte IE 6]>
 <style type="text/css">
 
@@ -29,7 +32,11 @@ behavior:url("inc/iepngfix.htc");
 
       <h1><a href="/"><span>Püha Taevas</span></a></h1>
       <div id="intro">
+<% if 'en' == @lang then %>
+        <h2>Behold the control of the Holy Instrument of Taevas. </h2>
+<% else %>    
         <h2>Sinu ees on Püha Instrumendi pärgament. </h2>
+<% end %>    
       </div>
 
     </div>
@@ -39,10 +46,17 @@ behavior:url("inc/iepngfix.htc");
     <div id="content">
 
       <div id="instruction">
+<% if 'en' == @lang then %>        
+        <p>Compose here your holiest wishes and inner voice.</p>
+        <p class="p2">Arrange the notes from the top to the bottom, to create the melody of your dreams. You will find the lower roars from the left and higher clings on the right.</p>
+        <p>Having the melody just right, name your creation and insert an e-mail address. Now just click “Create” and the Holy Instrument of Taevas will commence action.</p>
+        <p>After a few moments your song will appear on the screen and a video recording is sent to your e-mail to share with those who are worthy.</p>
+<% else %>    
         <p>Pane siia kirja oma kõige pühamad soovid ja sisemine hääl.</p>
         <p class="p2">Madalamad mörinad leiad vasakult, kõrged kilinad paremalt. Noodid sea ritta ülevalt alla, moodustades soovitud viisijupi.</p>
         <p>Kui õige lugu valmis, pane kirja oma loomingu pealkiri ja enda e-posti aadress. Nüüd ei olegi rohkem vaja, kui vajuta nuppu “Valmista” ja Taeva Püha Instrument asub tööle.</p>
         <p>Mõne hetke pärast on Sinu lugu ekraanil ja e-postkastis videojäädvustus, mida valitutega jagada.</p>
+<% end %>
       </div>
 
       <form id="editor_form" action="/song" method="post">
@@ -63,26 +77,24 @@ behavior:url("inc/iepngfix.htc");
         </span>
       <% end %>
 
-
-
         </div>
 
         <div id="send">
           <table width="100%">
             <tr>
-              <td><label for="fTitle">Loo pealkiri:</label></td>
+              <td><label for="fTitle"><% if 'en' == @lang then %>Song name:<% else %>Loo pealkiri:<% end %></label></td>
             </tr>
             <tr>
               <td class="field"><input type="text" class="text" name="name" id="fTitle" style="width:155px;" /></td>
             </tr>
             <tr>
-              <td><label for="fEmail">Sinu e-post:</label></td>
+              <td><label for="fEmail"><% if 'en' == @lang then %>Your e-mail:<% else %>Sinu e-post:<% end %></label></td>
             </tr>
             <tr>
               <td class="field"><input type="text" class="text" name="email" id="fEmail" style="width:155px;" /></td>
             </tr>
             <tr>
-              <td><input type="submit" class="submit" value="Valmista" /></td>
+              <td><input type="submit" class="submit" value="<% if 'en' == @lang then %>Create<% else %>Valmista<% end %>" /></td>
             </tr>
           </table>
         </div>

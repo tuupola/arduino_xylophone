@@ -4,6 +4,9 @@
 <title><%= @song.name %></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link type="text/css" rel="stylesheet" href="/css/base.css" media="screen" />
+<% if 'en' == @lang then %>
+<link type="text/css" rel="stylesheet" href="/css/en.css" media="screen" />
+<% end %>
 <!--[if lte IE 6]>
 <style type="text/css">
 
@@ -15,22 +18,7 @@ behavior:url("inc/iepngfix.htc");
 <![endif]--> 
 </head>
 <body class="send">
-<!--
 
-<div class="centered">
-  <div id="video" title="<%= @song.id %>"></div>
-  <form id="greeting" method="post" action="/greeting">
-    <input type="hidden" name="song_id" value="<%= @song.id %>" />
-    Your email:<input type="text" name="from" value="<%= @song.email %>"/>
-    Friends email:<input type="text" name="to" /><br/>
-    <textarea name="message" />Lorem ipsum.</textarea><br />
-    <input type="submit" value="Send awesomeness!" />
-  </form>
-</div>
-
-
-
--->
   <div id="taevas">
     <p><a href="http://www.taevas.ee"><span>www.taevas.ee</span></a></p>
   </div>
@@ -66,28 +54,28 @@ behavior:url("inc/iepngfix.htc");
         <div id="padSpan2">
           <table width="100%">
             <tr>
-              <td width="32%"><label for="fName">Sinu nimi:</label></td>
+              <td width="32%"><label for="fName"><% if 'en' == @lang then %>Your name:<% else %>Sinu nimi:<% end %></label></td>
               <td width="68%"><input type="text" class="text" name="user" id="fName" style="width:165px;" /></td>
             </tr>
             <tr>
-              <td width="32%"><label for="fEmail" class="text">Sinu e-post:</label></td>
+              <td width="32%"><label for="fEmail" class="text"><% if 'en' == @lang then %>Your e-mail:<% else %>Sinu e-post:<% end %></label></td>
               <td width="68%"><input type="text" class="text" name="from" id="fEmail" style="width:165px;" /></td>
             </tr>
             <tr>
-              <td colspan="2"><label for="fAddresses">Pane siia kirja nende aadressid, keda Püha Instrumendiga valgustada soovid:</label></td>
+              <td colspan="2"><label for="fAddresses"><% if 'en' == @lang then %>Name the e-mails of those who are worthy of your creation:<% else %>Pane siia kirja nende aadressid, keda Püha Instrumendiga valgustada soovid:<% end %></label></td>
             </tr>
             <tr>
               <td colspan="2" class="field"><input type="text" class="text" name="to" id="fAddresses" style="width:250px;" /></td>
             </tr>
             <tr>
-              <td colspan="2"><label for="fComment">Kui Sul on valgustatutele midagi lisaks öelda, siis siin on koht selle jaoks:</label></td>
+              <td colspan="2"><label for="fComment"><% if 'en' == @lang then %>If you wish to amplify the melody with a personal message, this is the place:<% else %>Kui Sul on valgustatutele midagi lisaks öelda, siis siin on koht selle jaoks:<% end %></label></td>
             </tr>
             <tr>
               <td colspan="2" class="field"><textarea name="message" id="fComment" style="width:250px; height:50px;"></textarea></td>
             </tr>
             <tr>
               <td>&nbsp;</td>
-              <td><input type="submit" class="submit" value="Saada" /></td>
+              <td><input type="submit" class="submit" value="<% if 'en' == @lang then %>Send<% else %>Saada<% end %>" /></td>
             </tr>
           </table>
         </div>
@@ -101,8 +89,8 @@ behavior:url("inc/iepngfix.htc");
       <div id="menu">
       <div id="menuSpan">
         <p>
-          <a href="/system/rsync/<%= @song.file_name %>" id="lDownload"><span>Tõmba see Püha Lugu oma raali.</span></a>
-          <a href="/song" id="lCreate"><span>Loo uus lugu Taeva Pühal Instrumendil.</span></a>
+          <a href="/system/rsync/<%= @song.file_name %>" id="lDownload"><span><% if 'en' == @lang then %>Get the video of this Holy Melody to your computer.<% else %>Tõmba see Püha Lugu oma raali.<% end %></span></a>
+          <a href="/song" id="lCreate"><span><% if 'en' == @lang then %>Compose your own melody on the Holy Instrument of Taevas.<% else %>Loo uus lugu Taeva Pühal Instrumendil.<% end %></span></a>
         </p>
       </div>
       </div>

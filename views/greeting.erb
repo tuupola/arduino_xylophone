@@ -4,6 +4,9 @@
 <title><%= @greeting.song.name %></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link type="text/css" rel="stylesheet" href="/css/base.css" media="screen" />
+<% if 'en' == @lang then %>
+<link type="text/css" rel="stylesheet" href="/css/en.css" media="screen" />
+<% end %>
 <!--[if lte IE 6]>
 <style type="text/css">
 
@@ -58,8 +61,8 @@ behavior:url("inc/iepngfix.htc");
       <div id="menu">
       <div id="menuSpan">
         <p>
-          <a href="/system/rsync/<%= @greeting.song.file_name %>" id="lDownload"><span>Tõmba see Püha Lugu oma raali.</span></a>
-          <a href="/song" id="lCreate"><span>Loo uus lugu Taeva Pühal Instrumendil.</span></a>
+          <a href="/system/rsync/<%= @greeting.song.file_name %>" id="lDownload"><span><% if 'en' == @lang then %>Get the video of this Holy Melody to your computer.<% else %>Tõmba see Püha Lugu oma raali.<% end %></span></a>
+          <a href="/song" id="lCreate"><span><% if 'en' == @lang then %>Compose your own melody on the Holy Instrument of Taevas.<% else %>Loo uus lugu Taeva Pühal Instrumendil.<% end %></span></a>
         </p>
       </div>
       </div>

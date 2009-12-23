@@ -21,6 +21,8 @@ require 'logger'
 # Setup
 #
 
+enable :sessions
+
 NOTES = 'CDEFGABcdefga'
 
 configure :development do
@@ -36,6 +38,10 @@ configure :production do
 end
 
 load 'models.rb'
+
+before do
+  @lang = session['lang']
+end
 
 #
 # For arduino
@@ -66,6 +72,16 @@ end
 get '/' do
   @title = 'Jingle bells, jingle bells, jingle all the way...'
   erb :index
+end
+
+get '/en' do
+  session['lang'] = 'en'
+  redirect '/'
+end
+
+get '/et' do
+  session['lang'] = 'et'
+  redirect '/'
 end
 
 # New song editor.

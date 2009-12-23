@@ -3,7 +3,10 @@
 <head>
 <title>Püha Taevas</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link type="text/css" rel="stylesheet" href="css/base.css" media="screen" />
+<link type="text/css" rel="stylesheet" href="/css/base.css" media="screen" />
+<% if 'en' == @lang then %>
+<link type="text/css" rel="stylesheet" href="/css/en.css" media="screen" />
+<% end %>
 <!--[if lte IE 6]>
 <style type="text/css">
 
@@ -29,7 +32,11 @@ behavior:url("inc/iepngfix.htc");
 
       <h1><a href="/"><span>Püha Taevas</span></a></h1>
       <div id="intro">
+<% if 'en' == @lang then %>
+      <p>Listen, my friend, for it's the time to rejoice. As Taevas means Heaven, our gift to you is heavenly. Our Holy Instrument plays to those who believe in the extraordinary and the unusual. Listen, my friend, to the heavenly sounds from Taevas.</p>
+<% else %>
         <p>Kuula, sõber, sest Taeva keeled on valla. Pühal Instrumendil lauldakse kiidulaulu kõigile, kes usuvad, sest nende päralt on paradiisiaed ja igavene õndsus. Kuula, sõber, sest Taevas kiidab Sind!</p>
+<% end %>
       </div>
 
     </div>
@@ -46,8 +53,15 @@ behavior:url("inc/iepngfix.htc");
       <div id="menu">
       <div id="menuSpan">
         <p>
+<% if 'en' == @lang then %>
+          <a href="/song" id="lCreate"><span>Compose your own melody on the Holy Instrument of Taevas.</span></a>
+          <a href="/random" id="lOthers"><span>Be inspired by a random tune.</span></a>
+
+<% else %>
           <a href="/song" id="lCreate"><span>Astu edasi ja loo oma lugu Taeva Pühal Instrumendil.</span></a>
           <a href="/random" id="lOthers"><span>Inspireeru teistest valgustatuist.</span></a>
+<% end %>
+
         </p>
       </div>
       </div>
